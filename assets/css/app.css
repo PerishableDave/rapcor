@@ -1,0 +1,14 @@
+/* This file is for your main application css. */
+
+body {
+  margin-top: 0;
+}
+
+.nav {
+  padding: 20px 0 20px 0;
+}
+
+.nav > h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
