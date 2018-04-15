@@ -51,8 +51,8 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :rapcor, Rapcor.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: System.get_env("DATA_DB_USER"),
-  password: System.get_env("DATA_DB_PASS"),
-  hostname: System.get_env("DATA_DB_HOST"),
+  username: "postgres",
+  password: "postgres",
+  hostname: "localhost",
   database: "rapcor_dev",
   pool_size: 10

@@ -1,8 +1,0 @@
-  <div class="container">
-    <div class="row">
-      <div class="col-md">
-        <h2>Coming Soon</h2>
-        <a href="/signup" class="btn btn-primary">Sign Up</a>
-      </div>
-    </div>
-  </div>

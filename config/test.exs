@@ -10,11 +10,11 @@ config :rapcor, RapcorWeb.Endpoint,
 config :logger, level: :warn
 
 # Configure your database
-config :orange, Orange.Repo,
+config :rapcor, Rapcor.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: System.get_env("DATA_DB_USER"),
-  password: System.get_env("DATA_DB_PASS"),
+  username: "postgres",
+  password: "postgres",
   database: "rapcor_test",
-  hostname: System.get_env("DATA_DB_HOST"),
+  hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 

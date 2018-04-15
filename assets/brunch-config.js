@@ -45,6 +45,8 @@ exports.config = {
   // Configure your plugins
   plugins: {
     babel: {
+      presets: ['env', 'react'],
+      plugins: ['transform-react-jsx'],
       // Do not use ES6 compiler in vendor code
       ignore: [/vendor/]
     }
@@ -52,7 +54,7 @@ exports.config = {
 
   modules: {
     autoRequire: {
-      "js/app.js": ["js/app"]
+      "js/app.js": ["js/index"]
     }
   },
 
