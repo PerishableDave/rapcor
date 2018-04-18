@@ -3,10 +3,10 @@ defmodule Rapcor.Repo.Migrations.CreateClinicians do
 
   def change do
     create table(:clinicians) do
-      add :first_name, :string
-      add :last_name, :string
+      add :first_name, :string, null: false
+      add :last_name, :string, null: false
       add :middle_name, :string
-      add :email, :string
+      add :email, :string, null: false, unique: true
       add :phone_number, :string
       add :country, :string
       add :administrative_area, :string
@@ -15,10 +15,11 @@ defmodule Rapcor.Repo.Migrations.CreateClinicians do
       add :premise, :string
       add :sub_administrative_area, :string
       add :thoroughfare, :string
-      add :password_hash, :string
+      add :password_hash, :string, null: false
 
       timestamps()
     end
 
+    create index(:clinicians, [:email], unique: true)
   end
 end

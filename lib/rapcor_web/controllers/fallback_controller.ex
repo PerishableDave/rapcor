@@ -17,4 +17,10 @@ defmodule RapcorWeb.FallbackController do
     |> put_status(:not_found)
     |> render(RapcorWeb.ErrorView, :"404")
   end
+
+  def call(conn, {:error, :unauthorized}) do
+    conn
+    |> put_status(:unauthorized)
+    |> render(RapcorWeb.ErrorView, :"403")
+  end
 end

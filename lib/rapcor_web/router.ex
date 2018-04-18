@@ -9,6 +9,7 @@ defmodule RapcorWeb.Router do
   scope "/v1", RapcorWeb do
     pipe_through :api
 
+    resources "/clinicians/tokens/", ClinicianTokenController
     resources "/clinicians", ClinicianController
   end
 end

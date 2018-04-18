@@ -3,6 +3,19 @@ defmodule Rapcor.ClinicianAccountsTest do
 
   alias Rapcor.ClinicianAccounts
   alias Rapcor.Clinician
+  
+  @clinician_valid_attrs %{administrative_area: "some administrative_area", country: "some country", email: "some@email.com", first_name: "some first_name", last_name: "some last_name", locality: "some locality", middle_name: "some middle_name", password: "some password", phone_number: "some phone_number", postal_code: "some postal_code", premise: "some premise", sub_administrative_area: "some sub_administrative_area", thoroughfare: "some thoroughfare"}
+
+ 
+  def clinician_fixture(attrs \\ %{}) do
+    {:ok, clinician} =
+      attrs
+      |> Enum.into(@clinician_valid_attrs)
+      |> ClinicianAccounts.create_clinician()
+
+    clinician = Map.put(clinician, :password, nil)
+    clinician
+  end
 
   describe "clinicians" do
     alias Rapcor.ClinicianAccounts.Clinician
@@ -11,15 +24,6 @@ defmodule Rapcor.ClinicianAccountsTest do
     @update_attrs %{administrative_area: "some updated administrative_area", country: "some updated country", email: "some@email.com", first_name: "some updated first_name", last_name: "some updated last_name", locality: "some updated locality", middle_name: "some updated middle_name", password: "some updated password_hash", phone_number: "some updated phone_number", postal_code: "some updated postal_code", premise: "some updated premise", sub_administrative_area: "some updated sub_administrative_area", thoroughfare: "some updated thoroughfare"}
     @invalid_attrs %{administrative_area: nil, country: nil, email: nil, first_name: nil, last_name: nil, locality: nil, middle_name: nil, password_hash: nil, phone_number: nil, postal_code: nil, premise: nil, sub_administrative_area: nil, thoroughfare: nil}
 
-    def clinician_fixture(attrs \\ %{}) do
-      {:ok, clinician} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> ClinicianAccounts.create_clinician()
-
-      clinician = Map.put(clinician, :password, nil)
-      clinician
-    end
 
     test "list_clinicians/0 returns all clinicians" do
       clinician = clinician_fixture()
@@ -86,6 +90,41 @@ defmodule Rapcor.ClinicianAccountsTest do
     test "change_clinician/1 returns a clinician changeset" do
       clinician = clinician_fixture()
       assert %Ecto.Changeset{} = ClinicianAccounts.change_clinician(clinician)
+    end
+  end
+
+  describe "clinician_tokens" do
+    alias Rapcor.ClinicianAccounts.ClinicianToken
+
+    def clinician_token_fixture() do
+      clinician = clinician_fixture()
+
+      {:ok, clinician_token} = ClinicianAccounts.create_clinician_token(clinician.email, "some password")
+
+      clinician_token
+    end
+
+    test "get_clinician_token!/1 returns the clinician_token with given id" do
+      clinician_token = clinician_token_fixture()
+      assert ClinicianAccounts.get_clinician_token!(clinician_token.id) == clinician_token
+    end
+
+    test "create_clinician_token/1 with valid data creates a clinician_token" do
+      clinician = clinician_fixture()
+      assert {:ok, %ClinicianToken{} = clinician_token} = ClinicianAccounts.create_clinician_token("some@email.com", "some password", source: "some source")
+      assert String.length(clinician_token.id) == 36
+      assert clinician_token.clinician_id == clinician.id
+      assert clinician_token.source == "some source"
+    end
+
+    test "create_clinician_token/1 with invalid data returns error changeset" do
+      assert {:error, :unauthorized} = ClinicianAccounts.create_clinician_token("some@email.com", "other password")
+    end
+
+    test "delete_clinician_token/1 deletes the clinician_token" do
+      clinician_token = clinician_token_fixture()
+      assert {:ok, %ClinicianToken{}} = ClinicianAccounts.delete_clinician_token(clinician_token)
+      assert_raise Ecto.NoResultsError, fn -> ClinicianAccounts.get_clinician_token!(clinician_token.id) end
     end
   end
 end
