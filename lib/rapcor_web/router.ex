@@ -1,6 +1,8 @@
 defmodule RapcorWeb.Router do
   use RapcorWeb, :router
 
+  alias Rapcor.Authorization.ClinicianAuthPlug
+
   pipeline :api do
     plug :accepts, ["json"]
   end

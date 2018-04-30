@@ -3,7 +3,8 @@ defmodule Rapcor.ClinicianAccountsTest do
 
   alias Rapcor.ClinicianAccounts
   alias Rapcor.Clinician
-  
+  alias Rapcor.ClinicianAccounts.ClinicianToken
+
   @clinician_valid_attrs %{administrative_area: "some administrative_area", country: "some country", email: "some@email.com", first_name: "some first_name", last_name: "some last_name", locality: "some locality", middle_name: "some middle_name", password: "some password", phone_number: "some phone_number", postal_code: "some postal_code", premise: "some premise", sub_administrative_area: "some sub_administrative_area", thoroughfare: "some thoroughfare"}
 
  
@@ -15,6 +16,14 @@ defmodule Rapcor.ClinicianAccountsTest do
 
     clinician = Map.put(clinician, :password, nil)
     clinician
+  end
+
+  def clinician_token_fixture() do
+    clinician = clinician_fixture()
+
+    {:ok, clinician_token} = ClinicianAccounts.create_clinician_token(clinician.email, "some password")
+
+    %{clinician_token: clinician_token, clinician: clinician}
   end
 
   describe "clinicians" do
@@ -33,6 +42,12 @@ defmodule Rapcor.ClinicianAccountsTest do
     test "get_clinician!/1 returns the clinician with given id" do
       clinician = clinician_fixture()
       assert ClinicianAccounts.get_clinician!(clinician.id) == clinician
+    end
+
+    test "get_clinician_by_token/1 returns the clinician with the given token" do
+      %{clinician_token: %ClinicianToken{id: token}, clinician: clinician} = clinician_token_fixture()
+
+      assert ClinicianAccounts.get_clinician_by_token(token) == clinician
     end
 
     test "create_clinician/1 with valid data creates a clinician" do
@@ -94,18 +109,10 @@ defmodule Rapcor.ClinicianAccountsTest do
   end
 
   describe "clinician_tokens" do
-    alias Rapcor.ClinicianAccounts.ClinicianToken
 
-    def clinician_token_fixture() do
-      clinician = clinician_fixture()
-
-      {:ok, clinician_token} = ClinicianAccounts.create_clinician_token(clinician.email, "some password")
-
-      clinician_token
-    end
-
+    
     test "get_clinician_token!/1 returns the clinician_token with given id" do
-      clinician_token = clinician_token_fixture()
+      %{clinician_token: clinician_token} = clinician_token_fixture()
       assert ClinicianAccounts.get_clinician_token!(clinician_token.id) == clinician_token
     end
 
@@ -122,7 +129,7 @@ defmodule Rapcor.ClinicianAccountsTest do
     end
 
     test "delete_clinician_token/1 deletes the clinician_token" do
-      clinician_token = clinician_token_fixture()
+      %{clinician_token: clinician_token} = clinician_token_fixture()
       assert {:ok, %ClinicianToken{}} = ClinicianAccounts.delete_clinician_token(clinician_token)
       assert_raise Ecto.NoResultsError, fn -> ClinicianAccounts.get_clinician_token!(clinician_token.id) end
     end

@@ -20,6 +20,9 @@ defmodule RapcorWeb.ConnCase do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
       import RapcorWeb.Router.Helpers
+      import RapcorWeb.Helpers.ConnHelpers
+
+      alias Plug.Conn
 
       # The default endpoint for testing
       @endpoint RapcorWeb.Endpoint

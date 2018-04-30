@@ -44,7 +44,8 @@ defmodule Rapcor.Mixfile do
       {:comeonin, "~> 4.1"},
       {:bcrypt_elixir, "~> 0.12"},
       {:ex_machina, "~> 2.2", only: :test},
-      {:faker, "~> 0.10", only: :test}
+      {:faker, "~> 0.10", only: :test},
+      {:cors_plug, "~> 1.5"}
     ]
   end
 

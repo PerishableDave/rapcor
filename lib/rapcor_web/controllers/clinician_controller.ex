@@ -3,8 +3,11 @@ defmodule RapcorWeb.ClinicianController do
 
   alias Rapcor.ClinicianAccounts
   alias Rapcor.ClinicianAccounts.Clinician
+  alias Rapcor.Authorization.ClinicianAuthPlug
 
   action_fallback RapcorWeb.FallbackController
+
+  plug ClinicianAuthPlug when action in [:show, :update, :delete]
 
   def index(conn, _params) do
     clinicians = ClinicianAccounts.list_clinicians()

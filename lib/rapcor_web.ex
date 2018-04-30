@@ -23,6 +23,7 @@ defmodule RapcorWeb do
       import Plug.Conn
       import RapcorWeb.Router.Helpers
       import RapcorWeb.Gettext
+      import Rapcor.Authorization.ClinicianAuthHelper
     end
   end
 

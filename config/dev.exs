@@ -56,3 +56,8 @@ config :rapcor, Rapcor.Repo,
   hostname: "localhost",
   database: "rapcor_dev",
   pool_size: 10
+
+config :cors_plug,
+  origin: ["*"],
+  max_age: 86400,
+  methods: ["GET", "POST"]

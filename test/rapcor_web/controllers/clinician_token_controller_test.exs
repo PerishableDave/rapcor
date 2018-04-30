@@ -4,19 +4,13 @@ defmodule RapcorWeb.ClinicianTokenControllerTest do
   alias Rapcor.Fixtures.ClinicianFixtures
   alias Rapcor.ClinicianAccounts
 
-  def fixture(:clinician_token) do
-    clinician = ClinicianFixtures.clinician()
-    {:ok, clinician_token} = ClinicianAccounts.create_clinician_token(clinician.email, "testing123")
-    clinician_token
-  end
-
   setup %{conn: conn} do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
 
   describe "create clinician_token" do
     test "renders clinician_token when data is valid", %{conn: conn} do
-      %{email: email} = ClinicianFixtures.clinician
+      %{clinician: %{email: email}} = ClinicianFixtures.clinician
       password = ClinicianFixtures.password
 
       conn = post conn, clinician_token_path(conn, :create), email: email, password: password
@@ -42,7 +36,9 @@ defmodule RapcorWeb.ClinicianTokenControllerTest do
   end
 
   defp create_clinician_token(_) do
-    clinician_token = fixture(:clinician_token)
+    %{clinician: clinician} = ClinicianFixtures.clinician()
+    {:ok, clinician_token} = ClinicianAccounts.create_clinician_token(clinician.email, ClinicianFixtures.password)
+
     {:ok, clinician_token: clinician_token}
   end
 end

@@ -70,3 +70,8 @@ config :rapcor, Rapcor.Repo,
   hostname: System.get_env("DATA_DB_HOST"),
   database: "rapcor_prod",
   pool_size: 10
+
+config :cors_plug,
+  origin: ["https://www.rapcor.com"],
+  max_age: 86400,
+  methods: ["GET", "POST"]

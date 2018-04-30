@@ -31,7 +31,6 @@ defmodule Rapcor.ClinicianAccounts.Clinician do
     :locality,
     :postal_code,
     :thoroughfare,
-    :premise,
     :password
   ]
 

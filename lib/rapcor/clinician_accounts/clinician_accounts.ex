@@ -103,6 +103,16 @@ defmodule Rapcor.ClinicianAccounts do
     Clinician.changeset(clinician, %{})
   end
 
+  def get_clinician_by_token(token) do
+    query = from c in Clinician,
+      join: t in ClinicianToken, on: t.clinician_id == c.id,
+      where: t.id == ^token,
+      select: c
+
+
+    Repo.one(query)
+  end
+
   @doc """
   Gets a single clinician_token.
 
