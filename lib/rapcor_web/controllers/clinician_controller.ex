@@ -24,22 +24,33 @@ defmodule RapcorWeb.ClinicianController do
   end
 
   def show(conn, %{"id" => id}) do
-    clinician = ClinicianAccounts.get_clinician!(id)
-    render(conn, "show.json", clinician: clinician)
+    clinician = current_clinician(conn)
+    if String.to_integer(id) == clinician.id do
+      render(conn, "show.json", clinician: clinician)
+    else
+      send_resp(conn, :unauthorized, "")
+    end
   end
 
   def update(conn, %{"id" => id, "clinician" => clinician_params}) do
-    clinician = ClinicianAccounts.get_clinician!(id)
-
-    with {:ok, %Clinician{} = clinician} <- ClinicianAccounts.update_clinician(clinician, clinician_params) do
-      render(conn, "show.json", clinician: clinician)
+    clinician = current_clinician(conn)
+    if String.to_integer(id) == clinician.id do
+      with {:ok, %Clinician{} = clinician} <- ClinicianAccounts.update_clinician(clinician, clinician_params) do
+        render(conn, "show.json", clinician: clinician)
+      end
+    else
+      send_resp(conn, :unauthorized, "")
     end
   end
 
   def delete(conn, %{"id" => id}) do
-    clinician = ClinicianAccounts.get_clinician!(id)
-    with {:ok, %Clinician{}} <- ClinicianAccounts.delete_clinician(clinician) do
-      send_resp(conn, :no_content, "")
+    clinician = current_clinician(conn)
+    if String.to_integer(id) == clinician.id do
+      with {:ok, %Clinician{}} <- ClinicianAccounts.delete_clinician(clinician) do
+        send_resp(conn, :no_content, "")
+      end
+    else
+      send_resp(conn, :unauthorized, "")
     end
   end
 end

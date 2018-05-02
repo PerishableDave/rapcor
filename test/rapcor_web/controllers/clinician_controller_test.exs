@@ -3,7 +3,6 @@ defmodule RapcorWeb.ClinicianControllerTest do
 
   alias Rapcor.ClinicianAccounts
   alias Rapcor.ClinicianAccounts.Clinician
-  alias Rapcor.ClinicianAccounts.ClinicianToken
   alias Rapcor.Fixtures.ClinicianFixtures
 
   @create_attrs %{administrative_area: "some administrative_area", country: "some country", email: "some@email.com", first_name: "some first_name", last_name: "some last_name", locality: "some locality", middle_name: "some middle_name", password: "some password_hash", phone_number: "some phone_number", postal_code: "some postal_code", premise: "some premise", sub_administrative_area: "some sub_administrative_area", thoroughfare: "some thoroughfare"}
@@ -51,13 +50,9 @@ defmodule RapcorWeb.ClinicianControllerTest do
   describe "update clinician" do
     setup [:create_clinician]
 
-    test "renders clinician when data is valid", %{conn: conn, clinician: %Clinician{id: id} = clinician, clinician_token: %ClinicianToken{id: token}} do
-      update_conn = Conn.put_req_header(conn, "authorization", "Bearer " <> token)
-      update_conn = put update_conn, clinician_path(update_conn, :update, clinician), clinician: @update_attrs
-      assert %{"id" => ^id} = json_response(update_conn, 200)["data"]
-
-      conn = Conn.put_req_header(conn, "authorization", "Bearer " <> token)
-      conn = get conn, clinician_path(conn, :show, id)
+    test "renders clinician when data is valid", %{conn: conn, clinician: %Clinician{id: id} = clinician, clinician_token: token} do
+      conn = put_auth(conn, token)
+      conn = put conn, clinician_path(conn, :update, clinician), clinician: @update_attrs
       assert json_response(conn, 200)["data"] == %{
         "id" => id,
         "administrative_area" => "some updated administrative_area",

@@ -23,7 +23,7 @@ defmodule RapcorWeb do
       import Plug.Conn
       import RapcorWeb.Router.Helpers
       import RapcorWeb.Gettext
-      import Rapcor.Authorization.ClinicianAuthHelper
+      import Rapcor.Authorization.ClinicianAuthHelper, only: [current_clinician: 1]
     end
   end
 
