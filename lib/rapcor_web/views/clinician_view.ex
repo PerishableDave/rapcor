@@ -3,11 +3,11 @@ defmodule RapcorWeb.ClinicianView do
   alias RapcorWeb.ClinicianView
 
   def render("index.json", %{clinicians: clinicians}) do
-    %{data: render_many(clinicians, ClinicianView, "clinician.json")}
+    %{clinicians: render_many(clinicians, ClinicianView, "clinician.json")}
   end
 
   def render("show.json", %{clinician: clinician}) do
-    %{data: render_one(clinician, ClinicianView, "clinician.json")}
+    %{clinician: render_one(clinician, ClinicianView, "clinician.json")}
   end
 
   def render("clinician.json", %{clinician: clinician}) do
