@@ -12,6 +12,8 @@ defmodule RapcorWeb.Router do
     pipe_through :api
 
     resources "/clinicians/tokens/", ClinicianTokenController
+    
+    get "/clinicians/current", ClinicianController, :current
     resources "/clinicians", ClinicianController
   end
 end

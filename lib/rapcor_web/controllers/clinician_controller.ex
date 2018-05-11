@@ -7,7 +7,7 @@ defmodule RapcorWeb.ClinicianController do
 
   action_fallback RapcorWeb.FallbackController
 
-  plug ClinicianAuthPlug when action in [:show, :update, :delete]
+  plug ClinicianAuthPlug when action in [:show, :update, :delete, :current]
 
   def index(conn, _params) do
     clinicians = ClinicianAccounts.list_clinicians()
@@ -30,6 +30,11 @@ defmodule RapcorWeb.ClinicianController do
     else
       send_resp(conn, :unauthorized, "")
     end
+  end
+
+  def current(conn, _params) do
+    clinician = current_clinician(conn)
+    render(conn, "show.json", clinician: clinician)
   end
 
   def update(conn, %{"id" => id, "clinician" => clinician_params}) do
