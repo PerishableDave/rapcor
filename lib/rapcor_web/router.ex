@@ -15,5 +15,7 @@ defmodule RapcorWeb.Router do
     
     get "/clinicians/current", ClinicianController, :current
     resources "/clinicians", ClinicianController
+
+    resources "/experiences", ExperienceController
   end
 end

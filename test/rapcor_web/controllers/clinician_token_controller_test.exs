@@ -14,7 +14,7 @@ defmodule RapcorWeb.ClinicianTokenControllerTest do
       password = ClinicianFixtures.password
 
       conn = post conn, clinician_token_path(conn, :create), email: email, password: password
-      assert %{"id" => id} = json_response(conn, 201)["data"]
+      assert %{"id" => id} = json_response(conn, 201)["token"]
       assert String.length(id) == 36
     end
 

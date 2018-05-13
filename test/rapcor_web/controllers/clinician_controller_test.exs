@@ -16,14 +16,14 @@ defmodule RapcorWeb.ClinicianControllerTest do
   describe "index" do
     test "lists all clinicians", %{conn: conn} do
       conn = get conn, clinician_path(conn, :index)
-      assert json_response(conn, 200)["data"] == []
+      assert json_response(conn, 200)["clinicians"] == []
     end
   end
 
   describe "create clinician" do
     test "renders clinician when data is valid", %{conn: conn} do
       conn = post conn, clinician_path(conn, :create), clinician: @create_attrs
-      json = json_response(conn, 201)["data"]
+      json = json_response(conn, 201)["clinician"]
       assert %{"id" => id} = json
       assert json == %{
         "id" => id,
@@ -53,7 +53,7 @@ defmodule RapcorWeb.ClinicianControllerTest do
     test "renders clinician when data is valid", %{conn: conn, clinician: %Clinician{id: id} = clinician, clinician_token: token} do
       conn = put_auth(conn, token)
       conn = put conn, clinician_path(conn, :update, clinician), clinician: @update_attrs
-      assert json_response(conn, 200)["data"] == %{
+      assert json_response(conn, 200)["clinician"] == %{
         "id" => id,
         "administrative_area" => "some updated administrative_area",
         "country" => "some updated country",
