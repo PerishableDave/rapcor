@@ -37,14 +37,10 @@ defmodule RapcorWeb.ClinicianController do
     render(conn, "show.json", clinician: clinician)
   end
 
-  def update(conn, %{"id" => id, "clinician" => clinician_params}) do
+  def update(conn, %{"clinician" => clinician_params}) do
     clinician = current_clinician(conn)
-    if String.to_integer(id) == clinician.id do
-      with {:ok, %Clinician{} = clinician} <- ClinicianAccounts.update_clinician(clinician, clinician_params) do
-        render(conn, "show.json", clinician: clinician)
-      end
-    else
-      send_resp(conn, :unauthorized, "")
+    with {:ok, %Clinician{} = clinician} <- ClinicianAccounts.update_clinician(clinician, clinician_params) do
+      render(conn, "show.json", clinician: clinician)
     end
   end
 

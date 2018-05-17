@@ -8,6 +8,8 @@ defmodule Rapcor.ClinicianAccounts do
 
   alias Rapcor.ClinicianAccounts.Clinician
   alias Rapcor.ClinicianAccounts.ClinicianToken
+  alias Rapcor.ClinicianAccounts.Experience
+  alias Rapcor.ClinicianAccounts.ClinicianExperience
 
   @doc """
   Returns the list of clinicians.
@@ -173,8 +175,6 @@ defmodule Rapcor.ClinicianAccounts do
     Repo.delete(clinician_token)
   end
 
-  alias Rapcor.ClinicianAccounts.Experience
-
   @doc """
   Returns the list of experiences.
 
@@ -267,5 +267,36 @@ defmodule Rapcor.ClinicianAccounts do
   """
   def change_experience(%Experience{} = experience) do
     Experience.changeset(experience, %{})
+  end
+
+  @doc """
+  Get clinician experience by clinician.
+
+  ## Examples
+
+      iex> list_clinician_experiences(clinician)
+      %Ecto.Changeset{source: %ClinicianExperience{}}
+
+  """
+  def list_clinician_experiences(%Clinician{} = clinician) do
+    query = from(ce in ClinicianExperience, where: ce.clinician_id == ^clinician.id)
+    Repo.all(query)
+  end
+
+  @doc """
+  Create clinician experience.
+  """
+  def create_clinician_experience(attrs \\ %{}) do
+    %ClinicianExperience{}
+    |> ClinicianExperience.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def create_or_update_clinician_experiences(attrs_list \\ [%{}]) do
+    clinician_experiences = Enum.map(attrs_list, fn attrs ->
+      Map.take(attrs, [:clinician_id, :experience_id, :years])
+    end)
+
+    Repo.insert_all(ClinicianExperience, clinician_experiences, on_conflict: :replace_all, conflict_target: [:clinician_id, :experience_id])
   end
 end

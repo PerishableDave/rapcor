@@ -6,6 +6,7 @@ defmodule Rapcor.ClinicianAccountsTest do
   alias Rapcor.ClinicianAccounts.ClinicianToken
 
   @clinician_valid_attrs %{administrative_area: "some administrative_area", country: "some country", email: "some@email.com", first_name: "some first_name", last_name: "some last_name", locality: "some locality", middle_name: "some middle_name", password: "some password", phone_number: "some phone_number", postal_code: "some postal_code", premise: "some premise", sub_administrative_area: "some sub_administrative_area", thoroughfare: "some thoroughfare"}
+  @experience_valid_attrs %{description: "some description"}
 
  
   def clinician_fixture(attrs \\ %{}) do
@@ -24,6 +25,15 @@ defmodule Rapcor.ClinicianAccountsTest do
     {:ok, clinician_token} = ClinicianAccounts.create_clinician_token(clinician.email, "some password")
 
     %{clinician_token: clinician_token, clinician: clinician}
+  end
+
+  def experience_fixture(attrs \\ %{}) do
+    {:ok, experience} =
+      attrs
+      |> Enum.into(@experience_valid_attrs)
+      |> ClinicianAccounts.create_experience()
+
+    experience
   end
 
   describe "clinicians" do
@@ -142,15 +152,6 @@ defmodule Rapcor.ClinicianAccountsTest do
     @update_attrs %{description: "some updated description"}
     @invalid_attrs %{description: nil}
 
-    def experience_fixture(attrs \\ %{}) do
-      {:ok, experience} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> ClinicianAccounts.create_experience()
-
-      experience
-    end
-
     test "list_experiences/0 returns all experiences" do
       experience = experience_fixture()
       assert ClinicianAccounts.list_experiences() == [experience]
@@ -192,6 +193,23 @@ defmodule Rapcor.ClinicianAccountsTest do
     test "change_experience/1 returns a experience changeset" do
       experience = experience_fixture()
       assert %Ecto.Changeset{} = ClinicianAccounts.change_experience(experience)
+    end
+  end
+
+  describe "clinicians experiences" do
+    alias Rapcor.ClinicianAccounts.ClinicianExperience
+
+    test "create_clinician_experience()/1 with valid data creates a clinician experience" do
+      clinician = clinician_fixture()
+      experience = experience_fixture()
+
+      attrs = %{
+        clinician_id: clinician.id,
+        experience_id: experience.id,
+        years: 1
+      }
+
+      assert {:ok, %ClinicianExperience{}} = ClinicianAccounts.create_clinician_experience(attrs)
     end
   end
 end

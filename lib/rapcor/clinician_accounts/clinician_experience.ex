@@ -6,15 +6,17 @@ defmodule Rapcor.ClinicianAccounts.ClinicianExperience do
   alias Rapcor.ClinicianAccounts.Experience
 
   schema "clinicians_experiences" do
+    field :years, :integer
     belongs_to :clinician, Clinician
     belongs_to :experience, Experience
+
     timestamps
   end
 
   @doc false
   def changeset(clinician_experience, attrs) do
     clinician_experience
-    |> cast(attrs, [:clinician_id, :experience_id])
-    |> validate_required([:clinician_id, :experience_id])
+    |> cast(attrs, [:clinician_id, :experience_id, :years])
+    |> validate_required([:clinician_id, :experience_id, :years])
   end
 end

@@ -60,4 +60,4 @@ config :rapcor, Rapcor.Repo,
 config :cors_plug,
   origin: ["*"],
   max_age: 86400,
-  methods: ["GET", "POST"]
+  methods: ["GET", "POST", "PUT", "DELETE"]

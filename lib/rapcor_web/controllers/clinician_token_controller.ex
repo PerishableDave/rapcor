@@ -6,7 +6,7 @@ defmodule RapcorWeb.ClinicianTokenController do
 
   action_fallback RapcorWeb.FallbackController
 
-  def create(conn, %{"email" => email, "password" => password} = params) do
+  def create(conn, %{"email" => email, "password" => password}) do
     with {:ok, %ClinicianToken{} = clinician_token} <- ClinicianAccounts.create_clinician_token(email, password) do
       conn
       |> put_status(:created)
@@ -15,7 +15,7 @@ defmodule RapcorWeb.ClinicianTokenController do
     end
   end
 
-  def create(conn, params) do
+  def create(conn, _params) do
     conn
     |> send_resp(:bad_request, "")
   end

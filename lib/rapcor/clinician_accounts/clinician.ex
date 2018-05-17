@@ -4,6 +4,7 @@ defmodule Rapcor.ClinicianAccounts.Clinician do
   import Comeonin.Bcrypt, only: [hashpwsalt: 1, check_pass: 2]
 
   alias Ecto.Changeset
+  alias Rapcor.ClinicianAccounts.Experience
 
   @attrs [
     :first_name,
@@ -51,6 +52,8 @@ defmodule Rapcor.ClinicianAccounts.Clinician do
     field :sub_administrative_area, :string # County
     field :thoroughfare, :string # Street and address
 
+    many_to_many :experiences, Experience, join_through: "clinicians_experiences"
+
     timestamps()
   end
 
@@ -58,7 +61,7 @@ defmodule Rapcor.ClinicianAccounts.Clinician do
   def changeset(clinician, attrs) do
     clinician
     |> cast(attrs, [:first_name, :last_name, :middle_name, :email, :phone_number, :country, :administrative_area, :locality, :postal_code, :premise, :sub_administrative_area, :thoroughfare, :password_hash])
-    |> validate_required([:first_name, :last_name, :middle_name, :email, :phone_number, :country, :administrative_area, :locality, :postal_code, :premise, :sub_administrative_area, :thoroughfare, :password_hash])
+    |> validate_required([:first_name, :last_name, :email, :phone_number, :country, :administrative_area, :locality, :postal_code, :thoroughfare, :password_hash])
   end
 
   def create_changeset(clinician, attrs) do

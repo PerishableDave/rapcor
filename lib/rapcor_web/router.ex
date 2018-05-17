@@ -1,7 +1,6 @@
 defmodule RapcorWeb.Router do
   use RapcorWeb, :router
 
-  alias Rapcor.Authorization.ClinicianAuthPlug
 
   pipeline :api do
     plug :accepts, ["json"]
@@ -14,7 +13,10 @@ defmodule RapcorWeb.Router do
     resources "/clinicians/tokens/", ClinicianTokenController
     
     get "/clinicians/current", ClinicianController, :current
-    resources "/clinicians", ClinicianController
+    put "/clinicians/current", ClinicianController, :update
+    get "/clinicians/current/experiences", ClinicianExperienceController, :index
+    post "/clinicians/current/experiences", ClinicianExperienceController, :create
+    resources "/clinicians", ClinicianController, only: [:index, :create]
 
     resources "/experiences", ExperienceController
   end
