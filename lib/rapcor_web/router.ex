@@ -16,7 +16,7 @@ defmodule RapcorWeb.Router do
     put "/clinicians/current", ClinicianController, :update
     get "/clinicians/current/experiences", ClinicianExperienceController, :index
     post "/clinicians/current/experiences", ClinicianExperienceController, :create
-    resources "/clinicians", ClinicianController, only: [:index, :create]
+    resources "/clinicians", ClinicianController, only: [:index, :create, :show]
 
     resources "/experiences", ExperienceController
   end
