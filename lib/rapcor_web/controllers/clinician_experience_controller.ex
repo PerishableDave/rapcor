@@ -27,13 +27,15 @@ defmodule RapcorWeb.ClinicianExperienceController do
   end
 
   def create(conn, %{"clinician_experiences" => clinician_experience_params}) do
-    clinician_id = current_clinician(conn).id
+    clinician = current_clinician(conn)
+    clinician_id = clinician.id
 
     clinician_experiences = clinician_experience_params
                             |> Enum.map(&filter_batch_params/1)
                             |> Enum.map(fn params -> Map.put(params, :clinician_id, clinician_id) end)
     ClinicianAccounts.create_or_update_clinician_experiences(clinician_experiences)
-    send_resp(conn, :accepted, "")
+    clinician_experiences = ClinicianAccounts.list_clinician_experiences(clinician)
+    render(conn, "index.json", clinician_experiences: clinician_experiences)
   end
 
   def filter_batch_params(%{"experience_id" => experience_id, "years" => years}) do

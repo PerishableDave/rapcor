@@ -292,11 +292,38 @@ defmodule Rapcor.ClinicianAccounts do
     |> Repo.insert()
   end
 
-  def create_or_update_clinician_experiences(attrs_list \\ [%{}]) do
-    clinician_experiences = Enum.map(attrs_list, fn attrs ->
-      Map.take(attrs, [:clinician_id, :experience_id, :years])
-    end)
+  @doc """
+  Gets a single clinican experience.
 
-    Repo.insert_all(ClinicianExperience, clinician_experiences, on_conflict: :replace_all, conflict_target: [:clinician_id, :experience_id])
+  Raises `Ecto.NoResultsError` if the Experience does not exist.
+
+  ## Examples
+
+      iex> get_clinician_experience!(123)
+      %ClinicianExperience{}
+
+      iex> get_clinician_experience!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_clinician_experience!(id), do: Repo.get!(ClinicianExperience, id)
+
+  def create_or_update_clinician_experiences(attrs_list \\ [%{}]) do
+    attrs_list
+    |> Enum.each(&create_or_update_clinician_experience/1)
+  end
+
+  def create_or_update_clinician_experience(attrs \\ %{}) do
+    clinician_id = Map.get(attrs, :clinician_id) || Map.get(attrs, "clinician_id")
+    experience_id = Map.get(attrs, :experience_id) || Map.get(attrs, "experience_id")
+
+    case Repo.get_by(ClinicianExperience, clinician_id: clinician_id, experience_id: experience_id) do
+      %ClinicianExperience{} = clinician_experience ->
+        changeset = ClinicianExperience.update_changeset(clinician_experience, attrs)
+        Repo.update(changeset)
+      nil ->
+        changeset = ClinicianExperience.changeset(%ClinicianExperience{}, attrs)
+        Repo.insert(changeset)
+    end
   end
 end

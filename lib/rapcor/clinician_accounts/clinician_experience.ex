@@ -19,4 +19,10 @@ defmodule Rapcor.ClinicianAccounts.ClinicianExperience do
     |> cast(attrs, [:clinician_id, :experience_id, :years])
     |> validate_required([:clinician_id, :experience_id, :years])
   end
+
+  def update_changeset(clinician_experience, attrs) do
+    clinician_experience
+    |> cast(attrs, [:years])
+    |> validate_required([:years])
+  end
 end
