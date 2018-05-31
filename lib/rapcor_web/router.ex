@@ -12,10 +12,14 @@ defmodule RapcorWeb.Router do
 
     resources "/clinicians/tokens/", ClinicianTokenController
     
-    get "/clinicians/current", ClinicianController, :current
-    put "/clinicians/current", ClinicianController, :update
-    get "/clinicians/current/experiences", ClinicianExperienceController, :index
-    post "/clinicians/current/experiences", ClinicianExperienceController, :create
+    get "/clinicians/current", ClinicianController, :current, as: :current_clinician
+    put "/clinicians/current", ClinicianController, :update, as: :current_clinician
+   
+    scope "/clinicians/current", as: :current_clinician do
+      resources "/experiences", ClinicianExperienceController, only: [:index, :create], as: :experience
+      resources "/documents", DocumentController
+    end
+
     resources "/clinicians", ClinicianController, only: [:index, :create, :show]
 
     resources "/experiences", ExperienceController

@@ -1,7 +1,6 @@
 defmodule RapcorWeb.ClinicianControllerTest do
   use RapcorWeb.ConnCase
 
-  alias Rapcor.ClinicianAccounts
   alias Rapcor.ClinicianAccounts.Clinician
   alias Rapcor.Fixtures.ClinicianFixtures
 
@@ -50,9 +49,9 @@ defmodule RapcorWeb.ClinicianControllerTest do
   describe "update clinician" do
     setup [:create_clinician]
 
-    test "renders clinician when data is valid", %{conn: conn, clinician: %Clinician{id: id} = clinician, clinician_token: token} do
+    test "renders clinician when data is valid", %{conn: conn, clinician: %Clinician{id: id}, clinician_token: token} do
       conn = put_auth(conn, token)
-      conn = put conn, clinician_path(conn, :update, clinician), clinician: @update_attrs
+      conn = put conn, current_clinician_path(conn, :update), clinician: @update_attrs
       assert json_response(conn, 200)["clinician"] == %{
         "id" => id,
         "administrative_area" => "some updated administrative_area",
@@ -69,24 +68,10 @@ defmodule RapcorWeb.ClinicianControllerTest do
         "thoroughfare" => "some updated thoroughfare"}
     end
 
-    test "renders errors when data is invalid", %{conn: conn, clinician: clinician, clinician_token: token} do
+    test "renders errors when data is invalid", %{conn: conn, clinician_token: token} do
       conn = put_auth(conn, token)
-      conn = put conn, clinician_path(conn, :update, clinician), clinician: @invalid_attrs
+      conn = put conn, current_clinician_path(conn, :update), clinician: @invalid_attrs
       assert json_response(conn, 422)["errors"] != %{}
-    end
-  end
-
-  describe "delete clinician" do
-    setup [:create_clinician]
-
-    test "deletes chosen clinician", %{conn: conn, clinician: clinician, clinician_token: token} do
-      conn = put_auth(conn, token)
-      conn = delete conn, clinician_path(conn, :delete, clinician)
-      assert response(conn, 204)
-
-      assert_raise Ecto.NoResultsError, fn ->
-        ClinicianAccounts.get_clinician!(clinician.id)
-      end
     end
   end
 

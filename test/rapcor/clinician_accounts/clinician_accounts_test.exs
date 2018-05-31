@@ -7,6 +7,7 @@ defmodule Rapcor.ClinicianAccountsTest do
 
   @clinician_valid_attrs %{administrative_area: "some administrative_area", country: "some country", email: "some@email.com", first_name: "some first_name", last_name: "some last_name", locality: "some locality", middle_name: "some middle_name", password: "some password", phone_number: "some phone_number", postal_code: "some postal_code", premise: "some premise", sub_administrative_area: "some sub_administrative_area", thoroughfare: "some thoroughfare"}
   @experience_valid_attrs %{description: "some description"}
+  @valid_attrs %{back_photo: "some back_photo", expiration: ~D[2010-04-17], front_photo: "some front_photo", name: "some name", number: "some number", slug: "rt-rcp", state: "some state"}
 
  
   def clinician_fixture(attrs \\ %{}) do
@@ -34,6 +35,18 @@ defmodule Rapcor.ClinicianAccountsTest do
       |> ClinicianAccounts.create_experience()
 
     experience
+  end
+
+  def document_fixture(attrs \\ %{}) do
+    clinician = clinician_fixture()
+
+    {:ok, document} =
+      attrs
+      |> Enum.into(@valid_attrs)
+      |> Map.put(:clinician_id, clinician.id)
+      |> ClinicianAccounts.create_document()
+
+    document
   end
 
   describe "clinicians" do
@@ -210,6 +223,72 @@ defmodule Rapcor.ClinicianAccountsTest do
       }
 
       assert {:ok, %ClinicianExperience{}} = ClinicianAccounts.create_clinician_experience(attrs)
+    end
+  end
+
+  describe "documents" do
+    alias Rapcor.ClinicianAccounts.Document
+
+        @update_attrs %{back_photo: "some updated back_photo", expiration: ~D[2011-05-18], front_photo: "some updated front_photo", name: "some updated name", number: "some updated number", slug: "rt-rcp", state: "some updated state"}
+    @invalid_attrs %{back_photo: nil, expiration: nil, front_photo: nil, number: nil, slug: nil, state: nil}
+    @valid_attrs %{back_photo: "some back_photo", expiration: ~D[2010-04-17], front_photo: "some front_photo", name: "some name", number: "some number", slug: "rt-rcp", state: "some state"}
+
+
+    
+    test "list_documents/0 returns all documents" do
+      document = document_fixture()
+      clinician = ClinicianAccounts.get_clinician!(document.clinician_id)
+      assert ClinicianAccounts.list_clinician_documents(clinician) == [document]
+    end
+
+    test "get_document!/1 returns the document with given id" do
+      document = document_fixture()
+      assert ClinicianAccounts.get_document!(document.id) == document
+    end
+
+    test "create_document/1 with valid data creates a document" do
+      clinician = clinician_fixture()
+      attrs = Map.put(@valid_attrs, :clinician_id, clinician.id)
+      assert {:ok, %Document{} = document} = ClinicianAccounts.create_document(attrs)
+      assert document.back_photo == "some back_photo"
+      assert document.expiration == ~D[2010-04-17]
+      assert document.front_photo == "some front_photo"
+      assert document.number == "some number"
+      assert document.slug == "rt-rcp"
+      assert document.state == "some state"
+    end
+
+    test "create_document/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = ClinicianAccounts.create_document(@invalid_attrs)
+    end
+
+    test "update_document/2 with valid data updates the document" do
+      document = document_fixture()
+      assert {:ok, document} = ClinicianAccounts.update_document(document, @update_attrs)
+      assert %Document{} = document
+      assert document.back_photo == "some updated back_photo"
+      assert document.expiration == ~D[2011-05-18]
+      assert document.front_photo == "some updated front_photo"
+      assert document.number == "some updated number"
+      assert document.slug == "rt-rcp"
+      assert document.state == "some updated state"
+    end
+
+    test "update_document/2 with invalid data returns error changeset" do
+      document = document_fixture()
+      assert {:error, %Ecto.Changeset{}} = ClinicianAccounts.update_document(document, @invalid_attrs)
+      assert document == ClinicianAccounts.get_document!(document.id)
+    end
+
+    test "delete_document/1 deletes the document" do
+      document = document_fixture()
+      assert {:ok, %Document{}} = ClinicianAccounts.delete_document(document)
+      assert_raise Ecto.NoResultsError, fn -> ClinicianAccounts.get_document!(document.id) end
+    end
+
+    test "change_document/1 returns a document changeset" do
+      document = document_fixture()
+      assert %Ecto.Changeset{} = ClinicianAccounts.change_document(document)
     end
   end
 end
