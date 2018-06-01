@@ -45,7 +45,13 @@ defmodule Rapcor.Mixfile do
       {:bcrypt_elixir, "~> 0.12"},
       {:ex_machina, "~> 2.2", only: :test},
       {:faker, "~> 0.10", only: :test},
-      {:cors_plug, "~> 1.5"}
+      {:cors_plug, "~> 1.5"},
+      {:ex_aws, "~> 2.0"},
+      {:ex_aws_s3, "~> 2.0"},
+      {:sweet_xml, "~> 0.3"},
+      {:poison, "~> 3.0"},
+      {:hackney, "~> 1.9"},
+      {:uuid, "~> 1.1" }
     ]
   end
 

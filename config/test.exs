@@ -18,3 +18,6 @@ config :rapcor, Rapcor.Repo,
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 
+config :rapcor, Rapcor.PhotoStorage,
+  bucket: "rapcor-dev"
+

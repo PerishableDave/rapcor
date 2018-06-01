@@ -61,3 +61,12 @@ config :cors_plug,
   origin: ["*"],
   max_age: 86400,
   methods: ["GET", "POST", "PUT", "DELETE"]
+
+config :ex_aws,
+  access_key_id: ["AKIAIVZYZ474LZZHU2WQ", :instance_role],
+  secret_access_key: ["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", :instance_role],
+  region: "us-west-1"
+
+config :rapcor, Rapcor.PhotoStorage,
+  bucket: "rapcor-dev"
+
