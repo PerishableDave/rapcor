@@ -4,6 +4,7 @@ defmodule RapcorWeb.DocumentController do
   alias Rapcor.ClinicianAccounts
   alias Rapcor.ClinicianAccounts.Document
   alias Rapcor.Authorization.ClinicianAuthPlug
+  alias Rapcor.PhotoStorage
 
   action_fallback RapcorWeb.FallbackController
 
@@ -17,7 +18,11 @@ defmodule RapcorWeb.DocumentController do
 
   def create(conn, %{"document" => document_params}) do
     clinician = current_clinician(conn)
-    document_params = Map.put(document_params, "clinician_id", clinician.id)
+
+    document_params = document_params
+    |> Map.put("clinician_id", clinician.id)
+    |> process_front_photo()
+    |> process_back_photo()
 
     with {:ok, %Document{} = document} <- ClinicianAccounts.create_document(document_params) do
       conn
@@ -43,6 +48,10 @@ defmodule RapcorWeb.DocumentController do
 
     case document.clinician_id == current_clinician(conn).id do
       true ->
+        document_params = document_params
+                          |> process_front_photo()
+                          |> process_back_photo()
+
         with {:ok, %Document{} = document} <- ClinicianAccounts.update_document(document, document_params) do
           render(conn, "show.json", document: document)
         end
@@ -63,4 +72,26 @@ defmodule RapcorWeb.DocumentController do
         send_resp(conn, :unauthorized, "")
     end
   end
+
+  defp process_front_photo(%{"front_photo" => %Plug.Upload{path: path}} = params) do
+    case PhotoStorage.upload_file(path) do
+      {:ok, photo_url} ->
+        %{params | "front_photo" => photo_url}
+      _ ->
+        %{params | "front_photo" => nil}
+    end
+  end
+
+  defp process_front_photo(params), do: params
+
+  defp process_back_photo(%{"back_photo" => %Plug.Upload{path: path}} = params) do
+    case PhotoStorage.upload_file(path) do
+      {:ok, photo_url} ->
+        %{params | "back_photo" => photo_url}
+      _ ->
+        %{params | "back_photo" => nil}
+    end
+  end
+
+  defp process_back_photo(params), do: params
 end

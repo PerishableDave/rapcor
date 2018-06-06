@@ -19,7 +19,7 @@ defmodule RapcorWeb.DocumentControllerTest do
     test "lists all documents", %{conn: conn, clinician_token: token} do
       conn = put_auth(conn, token)
       conn = get conn, current_clinician_document_path(conn, :index)
-      assert json_response(conn, 200)["data"] == []
+      assert json_response(conn, 200)["documents"] == []
     end
   end
 
@@ -28,11 +28,11 @@ defmodule RapcorWeb.DocumentControllerTest do
     test "renders document when data is valid", %{conn: conn, clinician_token: token} do
       create_conn = put_auth(conn, token)
       create_conn = post create_conn, current_clinician_document_path(create_conn, :create), document: @create_attrs
-      assert %{"id" => id} = json_response(create_conn, 201)["data"]
+      assert %{"id" => id} = json_response(create_conn, 201)["document"]
 
       conn = put_auth(conn, token)
       conn = get conn, current_clinician_document_path(conn, :show, id)
-      assert json_response(conn, 200)["data"] == %{
+      assert json_response(conn, 200)["document"] == %{
         "id" => id,
         "back_photo" => "some back_photo",
         "expiration" => "2010-04-17",
@@ -55,11 +55,11 @@ defmodule RapcorWeb.DocumentControllerTest do
     test "renders document when data is valid", %{conn: conn, document: %Document{id: id} = document, clinician_token: token} do
       update_conn = put_auth(conn, token)
       update_conn = put update_conn, current_clinician_document_path(update_conn, :update, document), document: @update_attrs
-      assert %{"id" => ^id} = json_response(update_conn, 200)["data"]
+      assert %{"id" => ^id} = json_response(update_conn, 200)["document"]
 
       conn = put_auth(conn, token)
       conn = get conn, current_clinician_document_path(conn, :show, id)
-      assert json_response(conn, 200)["data"] == %{
+      assert json_response(conn, 200)["document"] == %{
         "id" => id,
         "back_photo" => "some updated back_photo",
         "expiration" => "2011-05-18",
