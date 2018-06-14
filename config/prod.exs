@@ -82,5 +82,5 @@ config :ex_aws,
   secret_access_key: [System.get_env("AWS_S3_SECRET_KEY"), :instance_role],
   region: "us-west-1"
 
-
-
+config :rapcor, Rapcor.PhotoStorage,
+  bucket: "rapcor-prod"
