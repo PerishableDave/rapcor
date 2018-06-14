@@ -76,3 +76,11 @@ config :cors_plug,
   origin: ["https://www.rapcor.com"],
   max_age: 86400,
   methods: ["GET", "POST", "PUT", "DELETE"]
+
+config :ex_aws,
+  access_key_id: [System.get_env("AWS_S3_ACCESS_KEY"), :instance_role],
+  secret_access_key: [System.get_env("AWS_S3_SECRET_KEY"), :instance_role],
+  region: "us-west-1"
+
+
+
