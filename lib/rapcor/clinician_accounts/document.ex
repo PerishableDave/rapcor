@@ -1,9 +1,11 @@
 defmodule Rapcor.ClinicianAccounts.Document do
   use Ecto.Schema
   import Ecto.Changeset
+  import Rapcor.ClinicianAccounts.Document.RespiratoryTherapist
 
   alias Ecto.Changeset
   alias Rapcor.ClinicianAccounts.Clinician
+
 
   schema "documents" do
     field :back_photo, :string
@@ -18,40 +20,43 @@ defmodule Rapcor.ClinicianAccounts.Document do
     timestamps()
   end
 
+  
   @doc false
   def changeset(document, attrs) do
     document
     |> cast(attrs, [:slug, :number, :expiration, :state, :front_photo, :back_photo, :clinician_id])
-    |> validate_required([:slug, :number, :expiration, :state, :front_photo, :back_photo, :clinician_id])
+    |> validate_inclusion(:slug, ["rt-rcp", "rt-crt", "rt-rrt"])
+    |> validate_document_update()
   end
 
   def create_changeset(document, attrs) do
     document
     |> cast(attrs, [:slug, :number, :expiration, :state, :front_photo, :back_photo, :clinician_id])
     |> validate_inclusion(:slug, ["rt-rcp", "rt-crt", "rt-rrt"])
-    |> validate_document()
+    |> validate_document_create()
 
   end
 
-  def validate_document(%Changeset{changes: %{slug: "rt-rcp"}} = changeset) do
+  defp validate_document_create(%Changeset{changes: %{slug: slug}} = changeset) do
+    attrs = document_attrs(slug)
+
     changeset
-    |> cast(changeset.changes, [:slug, :number, :expiration, :state, :front_photo, :back_photo, :clinician_id])
-    |> validate_required([:slug, :number, :expiration, :state, :front_photo, :back_photo, :clinician_id])
+    |> cast(changeset.changes, attrs)
+    |> validate_required(attrs)
   end
 
-  def validate_document(%Changeset{changes: %{slug: "rt-crt"}} = changeset) do
+  defp validate_document_create(changeset) do
+    validate_required(changeset, [:slug])
+  end
+
+  defp validate_document_update(%Changeset{changes: %{slug: slug}} = changeset) do
+    attrs = document_attrs(slug)
+
     changeset
-    |> cast(changeset.changes, [:slug, :number, :expiration, :front_photo, :back_photo, :clinician_id])
-    |> validate_required([:slug, :number, :expiration, :front_photo, :clinician_id])
+    |> cast(changeset.changes, attrs)
   end
 
-  def validate_document(%Changeset{changes: %{slug: "rt-rrt"}} = changeset) do
-    changeset
-    |> cast(changeset.changes, [:slug, :number, :expiration, :front_photo, :back_photo, :clinician_id])
-    |> validate_required([:slug, :number, :expiration, :front_photo, :clinician_id])
-  end
-
-  def validate_document(changeset) do
+  defp validate_document_update(changeset) do
     validate_required(changeset, [:slug])
   end
 end
