@@ -23,5 +23,7 @@ defmodule RapcorWeb.Router do
     resources "/clinicians", ClinicianController, only: [:index, :create, :show]
 
     resources "/experiences", ExperienceController
+
+    resources "/providers", ProviderController, only: [:create]
   end
 end
