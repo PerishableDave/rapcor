@@ -35,7 +35,7 @@ defmodule Rapcor.ProviderAccountsTest do
     test "create_provider/1 with valid data creates a provider" do
       assert {:ok, %Provider{} = provider} = ProviderAccounts.create_provider(@valid_attrs)
       assert provider.administrative_area == "some administrative_area"
-      assert provider.contact_email == "some contact_email"
+      assert provider.contact_email == "some@email.com"
       assert provider.contact_number == "some contact_number"
       assert provider.country == "some country"
       assert provider.locality == "some locality"
@@ -55,7 +55,7 @@ defmodule Rapcor.ProviderAccountsTest do
       assert {:ok, provider} = ProviderAccounts.update_provider(provider, @update_attrs)
       assert %Provider{} = provider
       assert provider.administrative_area == "some updated administrative_area"
-      assert provider.contact_email == "some updated contact_email"
+      assert provider.contact_email == "some@email.com"
       assert provider.contact_number == "some updated contact_number"
       assert provider.country == "some updated country"
       assert provider.locality == "some updated locality"

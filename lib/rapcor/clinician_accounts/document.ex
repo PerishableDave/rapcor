@@ -25,6 +25,7 @@ defmodule Rapcor.ClinicianAccounts.Document do
   def changeset(document, attrs) do
     document
     |> cast(attrs, [:slug, :number, :expiration, :state, :front_photo, :back_photo, :clinician_id])
+    |> validate_required([:slug])
     |> validate_inclusion(:slug, ["rt-rcp", "rt-crt", "rt-rrt"])
     |> validate_document_update()
   end
@@ -32,6 +33,7 @@ defmodule Rapcor.ClinicianAccounts.Document do
   def create_changeset(document, attrs) do
     document
     |> cast(attrs, [:slug, :number, :expiration, :state, :front_photo, :back_photo, :clinician_id])
+    |> validate_required([:slug])
     |> validate_inclusion(:slug, ["rt-rcp", "rt-crt", "rt-rrt"])
     |> validate_document_create()
 

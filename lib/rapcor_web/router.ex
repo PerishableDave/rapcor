@@ -25,5 +25,8 @@ defmodule RapcorWeb.Router do
     resources "/experiences", ExperienceController
 
     resources "/providers", ProviderController, only: [:create]
+
+    get "/providers/current", ProviderController, :show, as: :current_provider
+    put "/providers/current", ProviderController, :update, as: :current_provider
   end
 end
