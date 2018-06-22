@@ -83,4 +83,36 @@ defmodule Rapcor.ProviderAccountsTest do
       assert %Ecto.Changeset{} = ProviderAccounts.change_provider(provider)
     end
   end
+
+  describe "provider_tokens" do
+    alias Rapcor.ProviderAccounts.ProviderToken
+
+    @valid_attrs %{source: "some source"}
+    @update_attrs %{source: "some updated source"}
+    @invalid_attrs %{source: nil}
+
+    def provider_token_fixture(attrs \\ %{}) do
+      {:ok, provider_token} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> ProviderAccounts.create_provider_token()
+
+      provider_token
+    end
+
+    test "create_provider_token/1 with valid data creates a provider_token" do
+      assert {:ok, %ProviderToken{} = provider_token} = ProviderAccounts.create_provider_token(@valid_attrs)
+      assert provider_token.source == "some source"
+    end
+
+    test "create_provider_token/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = ProviderAccounts.create_provider_token(@invalid_attrs)
+    end
+
+    test "delete_provider_token/1 deletes the provider_token" do
+      provider_token = provider_token_fixture()
+      assert {:ok, %ProviderToken{}} = ProviderAccounts.delete_provider_token(provider_token)
+      assert_raise Ecto.NoResultsError, fn -> ProviderAccounts.get_provider_token!(provider_token.id) end
+    end
+  end
 end

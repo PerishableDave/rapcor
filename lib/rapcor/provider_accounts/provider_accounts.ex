@@ -101,4 +101,65 @@ defmodule Rapcor.ProviderAccounts do
   def change_provider(%Provider{} = provider) do
     Provider.changeset(provider, %{})
   end
+
+  alias Rapcor.ProviderAccounts.ProviderToken
+
+  @doc """
+  Gets a single provider_token.
+
+  Raises `Ecto.NoResultsError` if the Provider token does not exist.
+
+  ## Examples
+
+      iex> get_provider_token!(123)
+      %ProviderToken{}
+
+      iex> get_provider_token!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_provider_token!(id), do: Repo.get!(ProviderToken, id)
+
+  @doc """
+  Creates a provider_token.
+
+  ## Examples
+
+      iex> create_provider_token(%{field: value})
+      {:ok, %ProviderToken{}}
+
+      iex> create_provider_token(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_provider_token(email, password, opts \\ []) do
+    source = Keyword.get(opts, :source)
+
+    with provider <- Repo.get_by(Provider, contact_email: email)
+         {:ok, _provider} <- Provider.check_password(provider, password),
+         changeset <- ProviderToken.changeset(%ProviderToken{}, %{source: source, provider_id: provider.id}),
+         {:ok, token} <- Repo.insert(changeset)
+    do
+      {:ok, token}
+    else
+      {:error, :unauthorized}
+    end
+  end
+
+  @doc """
+  Deletes a ProviderToken.
+
+  ## Examples
+
+      iex> delete_provider_token(provider_token)
+      {:ok, %ProviderToken{}}
+
+      iex> delete_provider_token(provider_token)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_provider_token(%ProviderToken{} = provider_token) do
+    Repo.delete(provider_token)
+  end
+
 end
