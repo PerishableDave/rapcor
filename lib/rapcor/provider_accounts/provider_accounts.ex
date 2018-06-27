@@ -7,6 +7,7 @@ defmodule Rapcor.ProviderAccounts do
   alias Rapcor.Repo
 
   alias Rapcor.ProviderAccounts.Provider
+  alias Rapcor.ProviderAccounts.ProviderToken
 
   @doc """
   Returns the list of providers.
@@ -36,6 +37,24 @@ defmodule Rapcor.ProviderAccounts do
 
   """
   def get_provider!(id), do: Repo.get!(Provider, id)
+
+  @doc """
+  Returns a provider from a ProviderToken
+
+  ## Examples
+
+      iex> get_provider_by_token(token)
+      {:ok, %Provider{}}
+
+  """
+  def get_provider_by_token(token) do
+    query = from p in Provider,
+      join: t in ProviderToken, on: t.provider_id == p.id,
+      where: t.id == ^token,
+      select: p
+
+    Repo.one(query)
+  end
 
   @doc """
   Creates a provider.
@@ -99,10 +118,8 @@ defmodule Rapcor.ProviderAccounts do
 
   """
   def change_provider(%Provider{} = provider) do
-    Provider.changeset(provider, %{})
+    Provider.create_changeset(provider, %{})
   end
-
-  alias Rapcor.ProviderAccounts.ProviderToken
 
   @doc """
   Gets a single provider_token.
@@ -135,14 +152,14 @@ defmodule Rapcor.ProviderAccounts do
   def create_provider_token(email, password, opts \\ []) do
     source = Keyword.get(opts, :source)
 
-    with provider <- Repo.get_by(Provider, contact_email: email)
+    with provider <- Repo.get_by(Provider, contact_email: email),
          {:ok, _provider} <- Provider.check_password(provider, password),
          changeset <- ProviderToken.changeset(%ProviderToken{}, %{source: source, provider_id: provider.id}),
          {:ok, token} <- Repo.insert(changeset)
-    do
+    do 
       {:ok, token}
     else
-      {:error, :unauthorized}
+      _ -> {:error, :unauthorized}
     end
   end
 

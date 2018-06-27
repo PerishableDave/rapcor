@@ -12,13 +12,6 @@ defmodule RapcorWeb.ClinicianControllerTest do
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
 
-  describe "index" do
-    test "lists all clinicians", %{conn: conn} do
-      conn = get conn, clinician_path(conn, :index)
-      assert json_response(conn, 200)["clinicians"] == []
-    end
-  end
-
   describe "create clinician" do
     test "renders clinician when data is valid", %{conn: conn} do
       conn = post conn, clinician_path(conn, :create), clinician: @create_attrs

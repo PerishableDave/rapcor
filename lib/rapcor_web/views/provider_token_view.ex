@@ -3,11 +3,11 @@ defmodule RapcorWeb.ProviderTokenView do
   alias RapcorWeb.ProviderTokenView
 
   def render("index.json", %{provider_tokens: provider_tokens}) do
-    %{data: render_many(provider_tokens, ProviderTokenView, "provider_token.json")}
+    %{token: render_many(provider_tokens, ProviderTokenView, "provider_token.json")}
   end
 
   def render("show.json", %{provider_token: provider_token}) do
-    %{data: render_one(provider_token, ProviderTokenView, "provider_token.json")}
+    %{token: render_one(provider_token, ProviderTokenView, "provider_token.json")}
   end
 
   def render("provider_token.json", %{provider_token: provider_token}) do

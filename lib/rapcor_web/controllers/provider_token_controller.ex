@@ -10,7 +10,6 @@ defmodule RapcorWeb.ProviderTokenController do
     with {:ok, %ProviderToken{} = provider_token} <- ProviderAccounts.create_provider_token(email, password) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", provider_token_path(conn, :show, provider_token))
       |> render("show.json", provider_token: provider_token)
     end
   end

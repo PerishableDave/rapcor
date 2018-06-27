@@ -3,13 +3,11 @@ defmodule RapcorWeb.ProviderController do
 
   alias Rapcor.ProviderAccounts
   alias Rapcor.ProviderAccounts.Provider
+  alias Rapcor.Authorization.ProviderAuthPlug
 
   action_fallback RapcorWeb.FallbackController
 
-  def index(conn, _params) do
-    providers = ProviderAccounts.list_providers()
-    render(conn, "index.json", providers: providers)
-  end
+  plug ProviderAuthPlug when action in [:show, :update, :delete]
 
   def create(conn, %{"provider" => provider_params}) do
     with {:ok, %Provider{} = provider} <- ProviderAccounts.create_provider(provider_params) do
@@ -19,13 +17,13 @@ defmodule RapcorWeb.ProviderController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    provider = ProviderAccounts.get_provider!(id)
+  def show(conn) do
+    provider = current_provider(conn)
     render(conn, "show.json", provider: provider)
   end
 
-  def update(conn, %{"id" => id, "provider" => provider_params}) do
-    provider = ProviderAccounts.get_provider!(id)
+  def update(conn, %{"provider" => provider_params}) do
+    provider = current_provider(conn)
 
     with {:ok, %Provider{} = provider} <- ProviderAccounts.update_provider(provider, provider_params) do
       render(conn, "show.json", provider: provider)
@@ -33,9 +31,13 @@ defmodule RapcorWeb.ProviderController do
   end
 
   def delete(conn, %{"id" => id}) do
-    provider = ProviderAccounts.get_provider!(id)
-    with {:ok, %Provider{}} <- ProviderAccounts.delete_provider(provider) do
-      send_resp(conn, :no_content, "")
+    provider = current_provider(conn)
+    if String.to_integer(id) == provider.id do
+      with {:ok, %Provider{}} <- ProviderAccounts.delete_provider(provider) do
+        send_resp(conn, :no_content, "")
+      end
+    else
+      send_resp(conn, :unauthorized, "")
     end
   end
 end

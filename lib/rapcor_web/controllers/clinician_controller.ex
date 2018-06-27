@@ -9,11 +9,6 @@ defmodule RapcorWeb.ClinicianController do
 
   plug ClinicianAuthPlug when action in [:show, :update, :delete, :current]
 
-  def index(conn, _params) do
-    clinicians = ClinicianAccounts.list_clinicians()
-    render(conn, "index.json", clinicians: clinicians)
-  end
-
   def create(conn, %{"clinician" => clinician_params}) do
     with {:ok, %Clinician{} = clinician} <- ClinicianAccounts.create_clinician(clinician_params) do
       conn

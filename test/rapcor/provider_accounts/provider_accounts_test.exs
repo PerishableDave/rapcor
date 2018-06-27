@@ -3,6 +3,7 @@ defmodule Rapcor.ProviderAccountsTest do
 
   alias Rapcor.ProviderAccounts
   alias Rapcor.ProviderAccounts.Provider
+  alias Rapcor.Fixtures.ProviderFixtures
 
   describe "providers" do
     alias Rapcor.ProviderAccounts.Provider
@@ -87,10 +88,6 @@ defmodule Rapcor.ProviderAccountsTest do
   describe "provider_tokens" do
     alias Rapcor.ProviderAccounts.ProviderToken
 
-    @valid_attrs %{source: "some source"}
-    @update_attrs %{source: "some updated source"}
-    @invalid_attrs %{source: nil}
-
     def provider_token_fixture(attrs \\ %{}) do
       {:ok, provider_token} =
         attrs
@@ -101,16 +98,20 @@ defmodule Rapcor.ProviderAccountsTest do
     end
 
     test "create_provider_token/1 with valid data creates a provider_token" do
-      assert {:ok, %ProviderToken{} = provider_token} = ProviderAccounts.create_provider_token(@valid_attrs)
-      assert provider_token.source == "some source"
+      %{provider: %{contact_email: email}} = ProviderFixtures.provider
+      password = ProviderFixtures.password
+      assert {:ok, %ProviderToken{} = provider_token} = ProviderAccounts.create_provider_token(email, password)
+      assert String.length(provider_token.id) == 36
     end
 
     test "create_provider_token/1 with invalid data returns error changeset" do
-      assert {:error, %Ecto.Changeset{}} = ProviderAccounts.create_provider_token(@invalid_attrs)
+      %{provider: %{contact_email: email}} = ProviderFixtures.provider
+      assert {:error, :unauthorized} = ProviderAccounts.create_provider_token(email, "123")
     end
 
     test "delete_provider_token/1 deletes the provider_token" do
-      provider_token = provider_token_fixture()
+      %{provider_token: provider_token} = ProviderFixtures.provider
+
       assert {:ok, %ProviderToken{}} = ProviderAccounts.delete_provider_token(provider_token)
       assert_raise Ecto.NoResultsError, fn -> ProviderAccounts.get_provider_token!(provider_token.id) end
     end

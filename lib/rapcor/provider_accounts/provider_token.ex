@@ -4,6 +4,7 @@ defmodule Rapcor.ProviderAccounts.ProviderToken do
 
   alias Rapcor.ProviderAccounts.Provider
 
+  @primary_key {:id, Ecto.UUID, autogenerate: true}
   schema "provider_tokens" do
     field :source, :string
 

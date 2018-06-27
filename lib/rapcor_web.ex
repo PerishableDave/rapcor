@@ -24,6 +24,7 @@ defmodule RapcorWeb do
       import RapcorWeb.Router.Helpers
       import RapcorWeb.Gettext
       import Rapcor.Authorization.ClinicianAuthHelper, only: [current_clinician: 1]
+      import Rapcor.Authorization.ProviderAuthHelper, only: [current_provider: 1]
     end
   end
 

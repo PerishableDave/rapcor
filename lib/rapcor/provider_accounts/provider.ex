@@ -6,6 +6,7 @@ defmodule Rapcor.ProviderAccounts.Provider do
   alias Ecto.Changeset
   @attrs [
     :administrative_area,
+    :sub_administrative_area,
     :contact_email,
     :contact_number,
     :country,
