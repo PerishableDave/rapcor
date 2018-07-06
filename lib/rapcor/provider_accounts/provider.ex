@@ -41,7 +41,7 @@ defmodule Rapcor.ProviderAccounts.Provider do
   def changeset(provider, attrs) do
     provider
     |> cast(attrs, @attrs)
-    |> validate_required([:name, :contact_email, :contact_number, :country, :administrative_area, :locality, :postal_code, :premise, :thoroughfare])
+    |> validate_required([:name, :contact_email, :contact_number, :country, :administrative_area, :locality, :postal_code, :thoroughfare])
     |> validate_format(:contact_email, ~r/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)
     |> validate_length(:password, min: 9, max: 100)
   end
@@ -49,7 +49,7 @@ defmodule Rapcor.ProviderAccounts.Provider do
   def create_changeset(provider, attrs) do
     provider
     |> cast(attrs, @attrs)
-    |> validate_required([:name, :contact_email, :contact_number, :country, :administrative_area, :locality, :postal_code, :premise, :thoroughfare, :password, :password_confirmation])
+    |> validate_required([:name, :contact_email, :contact_number, :country, :administrative_area, :locality, :postal_code,:thoroughfare, :password, :password_confirmation])
     |> update_change(:contact_email, &(String.downcase(&1)))
     |> validate_format(:contact_email, ~r/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)
     |> validate_length(:password, min: 9, max: 100)
