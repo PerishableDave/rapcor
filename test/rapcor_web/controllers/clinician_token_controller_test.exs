@@ -21,7 +21,6 @@ defmodule RapcorWeb.ClinicianTokenControllerTest do
     test "renders errors when data is invalid", %{conn: conn} do
       conn = post conn, clinician_token_path(conn, :create), stuff: "stuff"
       assert response(conn, 400)
-      # assert json_response(conn, 400)["errors"] != %{}
     end
   end
 
