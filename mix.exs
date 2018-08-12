@@ -51,7 +51,8 @@ defmodule Rapcor.Mixfile do
       {:sweet_xml, "~> 0.3"},
       {:poison, "~> 3.0"},
       {:hackney, "~> 1.9"},
-      {:uuid, "~> 1.1" }
+      {:uuid, "~> 1.1"},
+      {:ecto_enum, "~> 1.1"}
     ]
   end
 
@@ -65,7 +66,7 @@ defmodule Rapcor.Mixfile do
     [
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      "test": ["ecto.create --quiet", "ecto.migrate", "test"]
+      test: ["ecto.create --quiet", "ecto.migrate", "test"]
     ]
   end
 end
