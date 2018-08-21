@@ -17,9 +17,9 @@ defmodule RapcorWeb.ProviderRequestView do
       contact_email: request.contact_email,
       contact_phone: request.contact_phone,
       notes: request.notes,
-      required_experiences: Enum.map(request.required_experiences, fn required_experience ->
-        %{experience_id: required_experience.experience_id,
-          minimum_years: required_experience.minimum_years}
+      request_experiences: Enum.map(request.request_experiences, fn request_experience ->
+        %{experience_id: request_experience.experience_id,
+          minimum_years: request_experience.minimum_years}
       end)}
   end
 end

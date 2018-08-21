@@ -4,7 +4,7 @@ defmodule Rapcor.Registry.Request do
 
   alias Rapcor.ProviderAccounts.Provider
   alias Rapcor.Registry.Request.Enums.RequestStatus
-  alias Rapcor.Registry.Request.RequiredExperience
+  alias Rapcor.Registry.Request.RequestExperience
   
   @status ~w(open filled cancelled)
 
@@ -16,9 +16,9 @@ defmodule Rapcor.Registry.Request do
     field :start_date, :date
     field :status, RequestStatus, defaults: :pending
 
-    embeds_many :required_experiences, RequiredExperience
-
     belongs_to :provider, Provider
+
+    has_many :request_experiences, RequestExperience
 
     timestamps()
   end
@@ -27,7 +27,7 @@ defmodule Rapcor.Registry.Request do
   def create_changeset(request, attrs) do
     request
     |> cast(attrs, [:start_date, :end_date, :contact_email, :contact_phone, :notes, :status, :provider_id])
-    |> cast_embed(:required_experiences)
+    |> cast_assoc(:request_experiences)
     |> validate_format(:contact_email, ~r/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)
     |> validate_required([:start_date, :end_date, :provider_id, :status])
     |> validate_inclusion(:status, @status)

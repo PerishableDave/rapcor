@@ -7,8 +7,9 @@ defmodule Rapcor.Registry do
   alias Rapcor.Repo
 
   alias Rapcor.ProviderAccounts.Provider
+  alias Rapcor.ClinicianAccounts.Clinician
   alias Rapcor.Registry.Request
-  alias Rapcor.Registry.RequestStatus
+  alias Rapcor.Registry.RequestBid
 
   @doc """
   Returns the list of requests by provider.
@@ -20,7 +21,10 @@ defmodule Rapcor.Registry do
 
   """
   def list_provider_requests(%Provider{} = provider) do
-    query = from(r in Request, where: r.provider_id == ^provider.id)
+    query = from r in Request,
+      where: r.provider_id == ^provider.id,
+      preload: :request_experiences
+
     Repo.all(query)
   end
 
@@ -38,7 +42,12 @@ defmodule Rapcor.Registry do
       ** (Ecto.NoResultsError)
 
   """
-  def get_request!(id), do: Repo.get!(Request, id)
+  def get_request!(id) do
+    query = from r in Request,
+      preload: :request_experiences
+
+    Repo.get!(query, id)
+  end
 
   @doc """
   Creates a request.
@@ -103,5 +112,14 @@ defmodule Rapcor.Registry do
   """
   def change_request(%Request{} = request) do
     Request.changeset(request, %{})
+  end
+
+  @doc """
+  Create request bid.
+  """
+  def create_request_bid(%Request{} = request, %Clinician{} = clinician) do
+    %RequestBid{}
+    |> RequestBid.create_changeset(%{request_id: request.id, clinician_id: clinician.id})
+    |> Repo.insert
   end
 end

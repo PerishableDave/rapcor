@@ -3,20 +3,24 @@ defmodule Rapcor.RegistryTest do
 
   alias Rapcor.Registry
   alias Rapcor.Fixtures.ProviderFixtures
+  alias Rapcor.Fixtures.ExperienceFixtures
 
   describe "requests" do
     alias Rapcor.Registry.Request
 
-    @valid_attrs %{contact_email: "some@email.com", contact_phone: "some contact_phone", end_date: ~D[2010-04-17], notes: "some notes", required_experiences: [%{experience_id: 1, minimum_years: 3}, %{experience_id: 2, minimum_years: 5}], start_date: ~D[2010-04-17]}
+    @valid_attrs %{contact_email: "some@email.com", contact_phone: "some contact_phone", end_date: ~D[2010-04-17], notes: "some notes", request_experiences: [%{experience_id: 1, minimum_years: 3}, %{experience_id: 2, minimum_years: 5}], start_date: ~D[2010-04-17]}
     @update_attrs %{contact_email: "updated@email.com", contact_phone: "some updated contact_phone", notes: "some updated notes"}
-    @invalid_attrs %{contact_email: nil, contact_phone: nil, end_date: nil, notes: nil, required_experiences: nil, start_date: nil, status: "test"}
+    @invalid_attrs %{contact_email: nil, contact_phone: nil, end_date: nil, notes: nil, request_experiences: nil, start_date: nil, status: "test"}
 
     def request_fixture(attrs \\ %{}) do
+      %{experience: %{id: experience_id}} = ExperienceFixtures.experience
+
       %{provider: provider} = ProviderFixtures.provider
       {:ok, request} =
         attrs
         |> Enum.into(@valid_attrs)
         |> Map.put(:provider_id, provider.id)
+        |> Map.put(:request_experiences, [%{experience_id: experience_id, minimum_years: 3}])
         |> Registry.create_request()
 
       request
@@ -35,8 +39,12 @@ defmodule Rapcor.RegistryTest do
     end
 
     test "create_request/1 with valid data creates a request" do
+      %{experience: %{id: experience_id}} = ExperienceFixtures.experience
       %{provider: provider} = ProviderFixtures.provider
-      attrs = Map.put(@valid_attrs, :provider_id, provider.id)
+
+      attrs = @valid_attrs
+      |> Map.put(:provider_id, provider.id)
+      |> Map.put(:request_experiences, [%{experience_id: experience_id, minimum_years: 3}])
 
       assert {:ok, %Request{} = request} = Registry.create_request(attrs)
       assert request.contact_email == "some@email.com"
@@ -45,7 +53,7 @@ defmodule Rapcor.RegistryTest do
       assert request.notes == "some notes"
       assert request.start_date == ~D[2010-04-17]
 
-      assert length(request.required_experiences) == 2
+      assert length(request.request_experiences) == 1
     end
 
     test "create_request/1 with invalid data returns error changeset" do
