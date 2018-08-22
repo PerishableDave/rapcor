@@ -2,13 +2,16 @@ defmodule Rapcor.RegistryTest do
   use Rapcor.DataCase
 
   alias Rapcor.Registry
+  alias Rapcor.ClinicianAccounts
   alias Rapcor.Fixtures.ProviderFixtures
+  alias Rapcor.Fixtures.ClinicianFixtures
   alias Rapcor.Fixtures.ExperienceFixtures
+  alias Rapcor.Fixtures.RequestFixtures
 
   describe "requests" do
     alias Rapcor.Registry.Request
 
-    @valid_attrs %{contact_email: "some@email.com", contact_phone: "some contact_phone", end_date: ~D[2010-04-17], notes: "some notes", request_experiences: [%{experience_id: 1, minimum_years: 3}, %{experience_id: 2, minimum_years: 5}], start_date: ~D[2010-04-17]}
+    @valid_attrs %{contact_email: "some@email.com", contact_phone: "some contact_phone", end_date: "2015-01-23T23:50:07.000000Z", notes: "some notes", request_experiences: [%{experience_id: 1, minimum_years: 3}, %{experience_id: 2, minimum_years: 5}], start_date: "2015-01-23T23:50:07.000000Z"}
     @update_attrs %{contact_email: "updated@email.com", contact_phone: "some updated contact_phone", notes: "some updated notes"}
     @invalid_attrs %{contact_email: nil, contact_phone: nil, end_date: nil, notes: nil, request_experiences: nil, start_date: nil, status: "test"}
 
@@ -46,12 +49,13 @@ defmodule Rapcor.RegistryTest do
       |> Map.put(:provider_id, provider.id)
       |> Map.put(:request_experiences, [%{experience_id: experience_id, minimum_years: 3}])
 
+      {:ok, date, _} = DateTime.from_iso8601("2015-01-23T23:50:07.000000Z")
       assert {:ok, %Request{} = request} = Registry.create_request(attrs)
       assert request.contact_email == "some@email.com"
       assert request.contact_phone == "some contact_phone"
-      assert request.end_date == ~D[2010-04-17]
+      assert request.end_date == date
       assert request.notes == "some notes"
-      assert request.start_date == ~D[2010-04-17]
+      assert request.start_date == date
 
       assert length(request.request_experiences) == 1
     end
@@ -84,6 +88,65 @@ defmodule Rapcor.RegistryTest do
     test "change_request/1 returns a request changeset" do
       request = request_fixture()
       assert %Ecto.Changeset{} = Registry.change_request(request)
+    end
+  end
+
+  describe "request_bids" do
+    test "create_request_bid/2 with valid data creates a request bid" do
+      %{request: request} = RequestFixtures.request()
+      %{clinician: clinician} = ClinicianFixtures.clinician()
+
+      assert {:ok, request_bid} = Registry.create_request_bid(request, clinician)
+      assert request_bid.request_id == request.id
+      assert request_bid.clinician_id == clinician.id
+    end
+
+    test "list_eligible_clinicians/2 with eligible clinicians returns the clinicians" do
+      _ = ClinicianFixtures.clinician() # Ineligible clinician
+      %{clinician: eligible_clinician} = ClinicianFixtures.clinician()
+
+      {:ok, experience_one} = ClinicianAccounts.create_experience(%{description: "one"})
+      {:ok, experience_two} = ClinicianAccounts.create_experience(%{description: "two"})
+
+      clinician_experience_attrs = [
+        %{clinician_id: eligible_clinician.id, experience_id: experience_one.id, years: 3},
+        %{clinician_id: eligible_clinician.id, experience_id: experience_two.id, years: 3}
+      ]
+
+      :ok = ClinicianAccounts.create_or_update_clinician_experiences(clinician_experience_attrs)
+
+      %{request: request} = RequestFixtures.request(%{request_experiences: [
+        %{experience_id: experience_one.id, minimum_years: 3},
+        %{experience_id: experience_two.id, minimum_years: 3}
+      ]})
+
+      clinicians = Registry.list_eligible_clinicians(request)
+
+      assert length(clinicians) == 1
+    end
+
+    test "accept_request_bid/1 with open request returns an updated and fulfilled request" do
+      %{request: request} = RequestFixtures.request()
+      %{clinician: clinician} = ClinicianFixtures.clinician()
+
+      {:ok, request_bid} = Registry.create_request_bid(request, clinician)
+
+      assert {:ok, request} = Registry.accept_request_bid(request_bid)
+      assert request.status == :fulfilled
+      assert request.accepted_clinician_id == clinician.id
+    end
+
+    test "accept_request_bid/1 with a fulfilled request returns an error" do
+      %{request: request} = RequestFixtures.request()
+      %{clinician: accepted_clinician} = ClinicianFixtures.clinician()
+      %{clinician: rejected_clinician} = ClinicianFixtures.clinician()
+
+      {:ok, accepted_request_bid} = Registry.create_request_bid(request, accepted_clinician)
+      {:ok, rejected_request_bid} = Registry.create_request_bid(request, rejected_clinician)
+
+      {:ok, _} = Registry.accept_request_bid(accepted_request_bid)
+      assert {:error, _} = Registry.accept_request_bid(rejected_request_bid)
+
     end
   end
 end

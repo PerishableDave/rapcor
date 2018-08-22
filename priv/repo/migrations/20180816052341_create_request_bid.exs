@@ -19,10 +19,15 @@ defmodule Rapcor.Repo.Migrations.CreateRequestBid do
       add :minimum_years, :integer, null: false
     end
 
-    create index(:request_experiences, [:request_id], unique: true)
+    create index(:request_experiences, [:request_id])
 
     alter table(:requests) do
       remove :required_experiences
+
+      modify :start_date, :utc_datetime
+      modify :end_date, :utc_datetime
+
+      add :accepted_clinician_id, references(:clinicians)
     end
   end
 end

@@ -18,6 +18,5 @@ defmodule Rapcor.Registry.Request.RequestExperience do
     |> validate_required([:experience_id, :minimum_years])
     |> validate_number(:minimum_years, greater_than: 0)
     |> validate_number(:experience_id, greater_than: 0)
-    |> validate_number(:request_id, greater_than: 0)
   end
 end

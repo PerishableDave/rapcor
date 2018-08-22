@@ -6,8 +6,8 @@ defmodule RapcorWeb.ProviderRequestControllerTest do
   alias Rapcor.Fixtures.ProviderFixtures
   alias Rapcor.Fixtures.ExperienceFixtures
 
-  @create_attrs %{contact_email: "some@email.com", contact_phone: "some contact_phone", end_date: ~D[2010-04-17], notes: "some notes", request_experiences: [%{experience_id: 1, minimum_years: 3}], start_date: ~D[2010-04-17]}
-  @update_attrs %{contact_email: "updated@email.com", contact_phone: "some updated contact_phone", end_date: ~D[2011-05-18], notes: "some updated notes", request_experiences: [], start_date: ~D[2011-05-18]}
+  @create_attrs %{contact_email: "some@email.com", contact_phone: "some contact_phone", end_date: "2015-01-23T23:50:07.000000Z", notes: "some notes", request_experiences: [%{experience_id: 1, minimum_years: 3}], start_date: "2015-01-23T23:50:07.000000Z"}
+  @update_attrs %{contact_email: "updated@email.com", contact_phone: "some updated contact_phone", end_date: "2015-01-23T23:50:07.000000Z", notes: "some updated notes", request_experiences: [], start_date: "2015-01-23T23:50:07.000000Z"}
   @invalid_attrs %{contact_email: "test", contact_phone: nil, notes: nil, request_experiences: nil}
 
   setup %{conn: conn} do
@@ -23,11 +23,11 @@ defmodule RapcorWeb.ProviderRequestControllerTest do
       assert json_response(conn, 200)["requests"] == [%{
         "contact_email" => "some@email.com",
         "contact_phone" => "some contact_phone",
-        "end_date" => "2010-04-17",
+        "end_date" => "2015-01-23T23:50:07.000000Z",
         "id" => request.id,
         "notes" => "some notes",
         "request_experiences" => [%{"experience_id" => experience.id, "minimum_years" => 3}],
-        "start_date" => "2010-04-17"
+        "start_date" => "2015-01-23T23:50:07.000000Z"
       }]
     end
   end
@@ -48,10 +48,10 @@ defmodule RapcorWeb.ProviderRequestControllerTest do
         "id" => id,
         "contact_email" => "some@email.com",
         "contact_phone" => "some contact_phone",
-        "end_date" => "2010-04-17",
+        "end_date" => "2015-01-23T23:50:07.000000Z",
         "notes" => "some notes",
         "request_experiences" => [%{"experience_id" => experience_id, "minimum_years" => 3}],
-        "start_date" => "2010-04-17"}
+        "start_date" => "2015-01-23T23:50:07.000000Z"}
     end
 
     test "renders errors when data is invalid", %{conn: conn, provider_token: token} do
@@ -77,8 +77,8 @@ defmodule RapcorWeb.ProviderRequestControllerTest do
         "contact_phone" => "some updated contact_phone",
         "notes" => "some updated notes",
         "request_experiences" => [%{"experience_id" => experience.id, "minimum_years" => 3}],
-        "start_date" => "2010-04-17",
-        "end_date" => "2010-04-17"}
+        "start_date" => "2015-01-23T23:50:07.000000Z",
+        "end_date" => "2015-01-23T23:50:07.000000Z"}
     end
 
     test "renders errors when data is invalid", %{conn: conn, request: request, provider_token: token} do

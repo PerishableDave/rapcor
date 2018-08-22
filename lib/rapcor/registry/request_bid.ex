@@ -17,7 +17,7 @@ defmodule Rapcor.Registry.RequestBid do
   @doc false
   def create_changeset(request_bid, attrs) do
     request_bid
-    |> cast(attrs, [:request_id, :provider_id, :slug])
+    |> cast(attrs, [:request_id, :clinician_id, :slug])
     |> validate_required([:clinician_id, :request_id])
   end
 end

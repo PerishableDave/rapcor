@@ -69,7 +69,7 @@ defmodule Rapcor.ClinicianAccounts.Clinician do
     |> cast(attrs, @attrs)
     |> validate_required(@create_required_attrs)
     |> update_change(:email,  &(String.downcase(&1)))
-    |> validate_format(:email, ~r/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)
+    |> validate_format(:email, ~r/^[a-zA-Z0-9_.'+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)
     |> validate_length(:password, min: 9, max: 100)
     |> unique_constraint(:email)
     |> put_password

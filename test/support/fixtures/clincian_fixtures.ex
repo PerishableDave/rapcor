@@ -3,6 +3,7 @@ defmodule Rapcor.Fixtures.ClinicianFixtures do
   alias Faker.Name
   alias Faker.Phone.EnUs, as: Phone
   alias Faker.Address
+  alias Faker.Internet
 
   import Map, only: [put: 3]
 
@@ -15,7 +16,7 @@ defmodule Rapcor.Fixtures.ClinicianFixtures do
     |> put(:first_name, Name.first_name)
     |> put(:last_name, Name.last_name)
     |> put(:middle_name, Name.last_name)
-    |> put(:email, "some@email.com")
+    |> put(:email, Internet.safe_email)
     |> put(:phone_number, Phone.phone)
     |> put(:administrative_area, Address.state)
     |> put(:locality, Address.city)
