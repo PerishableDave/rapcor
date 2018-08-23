@@ -6,8 +6,8 @@ defmodule RapcorWeb.ProviderRequestControllerTest do
   alias Rapcor.Fixtures.ProviderFixtures
   alias Rapcor.Fixtures.ExperienceFixtures
 
-  @create_attrs %{contact_email: "some@email.com", contact_phone: "some contact_phone", end_date: "2015-01-23T23:50:07.000000Z", notes: "some notes", request_experiences: [%{experience_id: 1, minimum_years: 3}], start_date: "2015-01-23T23:50:07.000000Z"}
-  @update_attrs %{contact_email: "updated@email.com", contact_phone: "some updated contact_phone", end_date: "2015-01-23T23:50:07.000000Z", notes: "some updated notes", request_experiences: [], start_date: "2015-01-23T23:50:07.000000Z"}
+  @create_attrs %{contact_email: "some@email.com", contact_phone: "+11231234", end_date: "2015-01-23T23:50:07.000000Z", notes: "some notes", request_experiences: [%{experience_id: 1, minimum_years: 3}], start_date: "2015-01-23T23:50:07.000000Z"}
+  @update_attrs %{contact_email: "updated@email.com", contact_phone: "+12342345", end_date: "2015-01-23T23:50:07.000000Z", notes: "some updated notes", request_experiences: [], start_date: "2015-01-23T23:50:07.000000Z"}
   @invalid_attrs %{contact_email: "test", contact_phone: nil, notes: nil, request_experiences: nil}
 
   setup %{conn: conn} do
@@ -22,7 +22,7 @@ defmodule RapcorWeb.ProviderRequestControllerTest do
       conn = get conn, current_provider_request_path(conn, :index)
       assert json_response(conn, 200)["requests"] == [%{
         "contact_email" => "some@email.com",
-        "contact_phone" => "some contact_phone",
+        "contact_phone" => "+11231234",
         "end_date" => "2015-01-23T23:50:07.000000Z",
         "id" => request.id,
         "notes" => "some notes",
@@ -47,7 +47,7 @@ defmodule RapcorWeb.ProviderRequestControllerTest do
       assert json_response(conn, 200)["request"] == %{
         "id" => id,
         "contact_email" => "some@email.com",
-        "contact_phone" => "some contact_phone",
+        "contact_phone" => "+11231234",
         "end_date" => "2015-01-23T23:50:07.000000Z",
         "notes" => "some notes",
         "request_experiences" => [%{"experience_id" => experience_id, "minimum_years" => 3}],
@@ -74,7 +74,7 @@ defmodule RapcorWeb.ProviderRequestControllerTest do
       assert json_response(conn, 200)["request"] == %{
         "id" => id,
         "contact_email" => "updated@email.com",
-        "contact_phone" => "some updated contact_phone",
+        "contact_phone" => "+12342345",
         "notes" => "some updated notes",
         "request_experiences" => [%{"experience_id" => experience.id, "minimum_years" => 3}],
         "start_date" => "2015-01-23T23:50:07.000000Z",

@@ -52,7 +52,9 @@ defmodule Rapcor.Mixfile do
       {:poison, "~> 3.0"},
       {:hackney, "~> 1.9"},
       {:uuid, "~> 1.1"},
-      {:ecto_enum, "~> 1.1"}
+      {:ecto_enum, "~> 1.1"},
+      {:exq, "~> 0.12.1"},
+      {:ex_twilio, "~> 0.6.0"}
     ]
   end
 

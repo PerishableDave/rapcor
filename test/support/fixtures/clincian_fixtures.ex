@@ -1,7 +1,7 @@
 defmodule Rapcor.Fixtures.ClinicianFixtures do
   alias Rapcor.ClinicianAccounts
   alias Faker.Name
-  alias Faker.Phone.EnUs, as: Phone
+  alias Faker.Util
   alias Faker.Address
   alias Faker.Internet
 
@@ -17,7 +17,7 @@ defmodule Rapcor.Fixtures.ClinicianFixtures do
     |> put(:last_name, Name.last_name)
     |> put(:middle_name, Name.last_name)
     |> put(:email, Internet.safe_email)
-    |> put(:phone_number, Phone.phone)
+    |> put(:phone_number, "+1" <> Util.format("%7d"))
     |> put(:administrative_area, Address.state)
     |> put(:locality, Address.city)
     |> put(:postal_code, Address.postcode)

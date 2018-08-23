@@ -11,8 +11,8 @@ defmodule Rapcor.RegistryTest do
   describe "requests" do
     alias Rapcor.Registry.Request
 
-    @valid_attrs %{contact_email: "some@email.com", contact_phone: "some contact_phone", end_date: "2015-01-23T23:50:07.000000Z", notes: "some notes", request_experiences: [%{experience_id: 1, minimum_years: 3}, %{experience_id: 2, minimum_years: 5}], start_date: "2015-01-23T23:50:07.000000Z"}
-    @update_attrs %{contact_email: "updated@email.com", contact_phone: "some updated contact_phone", notes: "some updated notes"}
+    @valid_attrs %{contact_email: "some@email.com", contact_phone: "+11231234", end_date: "2015-01-23T23:50:07.000000Z", notes: "some notes", request_experiences: [%{experience_id: 1, minimum_years: 3}, %{experience_id: 2, minimum_years: 5}], start_date: "2015-01-23T23:50:07.000000Z"}
+    @update_attrs %{contact_email: "updated@email.com", contact_phone: "+12342345", notes: "some updated notes"}
     @invalid_attrs %{contact_email: nil, contact_phone: nil, end_date: nil, notes: nil, request_experiences: nil, start_date: nil, status: "test"}
 
     def request_fixture(attrs \\ %{}) do
@@ -52,7 +52,7 @@ defmodule Rapcor.RegistryTest do
       {:ok, date, _} = DateTime.from_iso8601("2015-01-23T23:50:07.000000Z")
       assert {:ok, %Request{} = request} = Registry.create_request(attrs)
       assert request.contact_email == "some@email.com"
-      assert request.contact_phone == "some contact_phone"
+      assert request.contact_phone == "+11231234"
       assert request.end_date == date
       assert request.notes == "some notes"
       assert request.start_date == date
@@ -69,7 +69,7 @@ defmodule Rapcor.RegistryTest do
       assert {:ok, request} = Registry.update_request(request, @update_attrs)
       assert %Request{} = request
       assert request.contact_email == "updated@email.com"
-      assert request.contact_phone == "some updated contact_phone"
+      assert request.contact_phone == "+12342345"
       assert request.notes == "some updated notes"
     end
 

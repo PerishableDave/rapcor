@@ -2,7 +2,7 @@ defmodule Rapcor.Fixtures.ProviderFixtures do
   alias Rapcor.ProviderAccounts
   alias Faker.Name
   alias Faker.Address
-  alias Faker.Phone.EnUs, as: Phone
+  alias Faker.Util
   alias Faker.Internet
 
   import Map, only: [put: 3]
@@ -15,7 +15,7 @@ defmodule Rapcor.Fixtures.ProviderFixtures do
     attrs = %{}
     |> put(:administrative_area, Address.state)
     |> put(:contact_email, Internet.safe_email)
-    |> put(:contact_number, Phone.phone)
+    |> put(:contact_number, "+1" <> Util.format("%7d"))
     |> put(:country, Address.country_code)
     |> put(:locality, Address.city)
     |> put(:postal_code, Address.postcode)

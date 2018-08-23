@@ -4,9 +4,9 @@ defmodule RapcorWeb.ProviderControllerTest do
   alias Rapcor.ProviderAccounts.Provider
   alias Rapcor.Fixtures.ProviderFixtures
 
-  @create_attrs %{administrative_area: "some administrative_area", contact_email: "some@email.com", contact_number: "some contact_number", country: "some country", locality: "some locality", name: "some name", password: "some password", password_confirmation: "some password", postal_code: "some postal_code", premise: "some premise", sub_administrative_area: "some sub_administrative_area", thoroughfare: "some thoroughfare"}
-  @update_attrs %{administrative_area: "some updated administrative_area", contact_email: "some@email.com", contact_number: "some updated contact_number", country: "some updated country", locality: "some updated locality", name: "some updated name", password: "some updated password", password_confirmation: "some updated password", postal_code: "some updated postal_code", premise: "some updated premise", sub_administrative_area: "some updated sub_administrative_area", thoroughfare: "some updated thoroughfare"}
-  @invalid_attrs %{administrative_area: nil, contact_email: nil, contact_number: "some updated contact_number", country: "some updated country", locality: "some updated locality", name: "some updated name", password: "some updated password", password_confirmation: "some updated password", postal_code: "some updated postal_code", premise: "some updated premise", sub_administrative_area: "some updated sub_administrative_area", thoroughfare: "some updated thoroughfare"}
+  @create_attrs %{administrative_area: "some administrative_area", contact_email: "some@email.com", contact_number: "+11231234", country: "some country", locality: "some locality", name: "some name", password: "some password", password_confirmation: "some password", postal_code: "some postal_code", premise: "some premise", sub_administrative_area: "some sub_administrative_area", thoroughfare: "some thoroughfare"}
+  @update_attrs %{administrative_area: "some updated administrative_area", contact_email: "some@email.com", contact_number: "+12342345", country: "some updated country", locality: "some updated locality", name: "some updated name", password: "some updated password", password_confirmation: "some updated password", postal_code: "some updated postal_code", premise: "some updated premise", sub_administrative_area: "some updated sub_administrative_area", thoroughfare: "some updated thoroughfare"}
+  @invalid_attrs %{administrative_area: nil, contact_email: nil, contact_number: "+12342345", country: "some updated country", locality: "some updated locality", name: "some updated name", password: "some updated password", password_confirmation: "some updated password", postal_code: "some updated postal_code", premise: "some updated premise", sub_administrative_area: "some updated sub_administrative_area", thoroughfare: "some updated thoroughfare"}
 
 
   setup %{conn: conn} do
@@ -22,7 +22,7 @@ defmodule RapcorWeb.ProviderControllerTest do
         "id" => id,
         "administrative_area" => "some administrative_area",
         "contact_email" => "some@email.com",
-        "contact_number" => "some contact_number",
+        "contact_number" => "+11231234",
         "country" => "some country",
         "locality" => "some locality",
         "name" => "some name",
@@ -48,7 +48,7 @@ defmodule RapcorWeb.ProviderControllerTest do
         "id" => id,
         "administrative_area" => "some updated administrative_area",
         "contact_email" => "some@email.com",
-        "contact_number" => "some updated contact_number",
+        "contact_number" => "+12342345",
         "country" => "some updated country",
         "locality" => "some updated locality",
         "name" => "some updated name",

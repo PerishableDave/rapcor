@@ -4,8 +4,8 @@ defmodule RapcorWeb.ClinicianControllerTest do
   alias Rapcor.ClinicianAccounts.Clinician
   alias Rapcor.Fixtures.ClinicianFixtures
 
-  @create_attrs %{administrative_area: "some administrative_area", country: "some country", email: "some@email.com", first_name: "some first_name", last_name: "some last_name", locality: "some locality", middle_name: "some middle_name", password: "some password_hash", phone_number: "some phone_number", postal_code: "some postal_code", premise: "some premise", sub_administrative_area: "some sub_administrative_area", thoroughfare: "some thoroughfare"}
-  @update_attrs %{administrative_area: "some updated administrative_area", country: "some updated country", email: "some@email.com", first_name: "some updated first_name", last_name: "some updated last_name", locality: "some updated locality", middle_name: "some updated middle_name", password_hash: "some updated password_hash", phone_number: "some updated phone_number", postal_code: "some updated postal_code", premise: "some updated premise", sub_administrative_area: "some updated sub_administrative_area", thoroughfare: "some updated thoroughfare"}
+  @create_attrs %{administrative_area: "some administrative_area", country: "some country", email: "some@email.com", first_name: "some first_name", last_name: "some last_name", locality: "some locality", middle_name: "some middle_name", password: "some password_hash", phone_number: "+11231234", postal_code: "some postal_code", premise: "some premise", sub_administrative_area: "some sub_administrative_area", thoroughfare: "some thoroughfare"}
+  @update_attrs %{administrative_area: "some updated administrative_area", country: "some updated country", email: "some@email.com", first_name: "some updated first_name", last_name: "some updated last_name", locality: "some updated locality", middle_name: "some updated middle_name", password_hash: "some updated password_hash", phone_number: "+12342345", postal_code: "some updated postal_code", premise: "some updated premise", sub_administrative_area: "some updated sub_administrative_area", thoroughfare: "some updated thoroughfare"}
   @invalid_attrs %{administrative_area: nil, country: nil, email: nil, first_name: nil, last_name: nil, locality: nil, middle_name: nil, password_hash: nil, phone_number: nil, postal_code: nil, premise: nil, sub_administrative_area: nil, thoroughfare: nil}
 
   setup %{conn: conn} do
@@ -26,7 +26,7 @@ defmodule RapcorWeb.ClinicianControllerTest do
         "last_name" => "some last_name",
         "locality" => "some locality",
         "middle_name" => "some middle_name",
-        "phone_number" => "some phone_number",
+        "phone_number" => "+11231234",
         "postal_code" => "some postal_code",
         "premise" => "some premise",
         "sub_administrative_area" => "some sub_administrative_area",
@@ -54,7 +54,7 @@ defmodule RapcorWeb.ClinicianControllerTest do
         "last_name" => "some updated last_name",
         "locality" => "some updated locality",
         "middle_name" => "some updated middle_name",
-        "phone_number" => "some updated phone_number",
+        "phone_number" => "+12342345",
         "postal_code" => "some updated postal_code",
         "premise" => "some updated premise",
         "sub_administrative_area" => "some updated sub_administrative_area",

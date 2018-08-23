@@ -31,6 +31,7 @@ defmodule Rapcor.Registry.Request do
     |> cast(attrs, [:start_date, :end_date, :contact_email, :contact_phone, :notes, :status, :provider_id])
     |> cast_assoc(:request_experiences)
     |> validate_format(:contact_email, ~r/^[a-zA-Z0-9_.'+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)
+    |> validate_format(:contact_phone, ~r/^\+?[1-9]\d{1,14}$/)
     |> validate_required([:start_date, :end_date, :provider_id, :status])
     |> validate_inclusion(:status, @status)
   end
@@ -40,6 +41,7 @@ defmodule Rapcor.Registry.Request do
     request
     |> cast(attrs, [:contact_email, :contact_phone, :notes, :status, :accepted_clinician_id])
     |> validate_format(:contact_email, ~r/^[a-zA-Z0-9_.'+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)
+    |> validate_format(:contact_phone, ~r/^\+?[1-9]\d{1,14}$/)
     |> validate_inclusion(:status, @status)
   end
 

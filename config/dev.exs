@@ -70,3 +70,24 @@ config :ex_aws,
 config :rapcor, Rapcor.PhotoStorage,
   bucket: "rapcor-dev"
 
+config :exq,
+  name: Exq,
+  host: "localhost",
+  port: 6379,
+  namespace: "exq_dev",
+  concurrency: :infinite,
+  queues: ["default"],
+  poll_timeout: 50,
+  scheduler_poll_timeout: 200,
+  scheduler_enable: true,
+  max_retries: 25,
+  shutdown_timeout: 5000,
+  start_on_application: false
+
+
+config :ex_twilio,
+  account_sid: System.get_env("TWILIO_ACCOUNT_SID"),
+  auth_token: System.get_env("TWILIO_AUTH_TOKEN")
+
+config :orange,
+  twilio_from_number: System.get_env("TWILIO_FROM_NUMBER")

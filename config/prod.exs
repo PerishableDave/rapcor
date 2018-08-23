@@ -84,3 +84,17 @@ config :ex_aws,
 
 config :rapcor, Rapcor.PhotoStorage,
   bucket: "rapcor-prod"
+
+config :exq,
+  name: Exq,
+  host: System.get_env("REDISCLOUD_URL"),
+  port: 6379,
+  namespace: "exq",
+  concurrency: :infinite,
+  queues: ["default"],
+  poll_timeout: 50,
+  scheduler_poll_timeout: 200,
+  scheduler_enable: true,
+  max_retries: 25,
+  shutdown_timeout: 5000,
+  start_on_application: false

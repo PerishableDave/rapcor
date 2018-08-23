@@ -2,7 +2,7 @@ defmodule Rapcor.Fixtures.RequestFixtures do
   alias Rapcor.Registry
   alias Rapcor.Fixtures.ProviderFixtures
   alias Faker.Internet
-  alias Faker.Phone.EnUs, as: Phone
+  alias Faker.Util
   alias Faker.Lorem
 
   def request(attrs \\ %{}) do
@@ -13,7 +13,7 @@ defmodule Rapcor.Fixtures.RequestFixtures do
 
     attrs = attrs
     |> Map.put_new(:contact_email, Internet.safe_email)
-    |> Map.put_new(:contact_phone, Phone.phone)
+    |> Map.put_new(:contact_phone, "+1" <> Util.format("%7d"))
     |> Map.put_new(:start_date, date)
     |> Map.put_new(:end_date, date)
     |> Map.put_new(:notes, Lorem.sentence)

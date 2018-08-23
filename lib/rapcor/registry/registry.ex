@@ -117,6 +117,25 @@ defmodule Rapcor.Registry do
   end
 
   @doc """
+  Gets a single request bid.
+
+  ## Examples
+  
+      iex> get_request_bid!(id)
+      {:ok, %RequestBid{}}
+
+      iex> get_request_bid!(id)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def get_request_bid!(id) do
+    query = from rb in RequestBid,
+      preload: [:request, :clinician]
+
+    Repo.get!(query, id)
+  end
+
+  @doc """
   Create request bid.
   """
   def create_request_bid(%Request{} = request, %Clinician{} = clinician) do
@@ -148,6 +167,8 @@ defmodule Rapcor.Registry do
 
     query = from c in Clinician,
       join: ce in ClinicianExperience, on: ce.clinician_id == c.id,
+      left_join: rb in RequestBid, on: rb.clinician_id == c.id,
+      where: is_nil(rb.id),
       group_by: c.id,
       select: c,
       limit: ^limit
