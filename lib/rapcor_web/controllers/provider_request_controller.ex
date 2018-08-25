@@ -23,7 +23,6 @@ defmodule RapcorWeb.ProviderRequestController do
     with {:ok, %Request{} = request} <- Registry.create_request(request_params) do
       conn
       |> put_status(:created)
-      |> put_resp_header("location", current_provider_request_path(conn, :show, request))
       |> render("show.json", request: request)
     end
   end

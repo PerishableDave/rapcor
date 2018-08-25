@@ -9,13 +9,16 @@ defmodule Rapcor.Workers.FillRequestWorker do
   end
 
   def perform(request_id) do
-    {:ok, request} = Registry.get_request(request_id)
+    request = Registry.get_request!(request_id)
 
-    case Registry.list_eligible_clinicians(request) do
-      [] ->
-        Logger.info "Eligible clinician unavailable for request: #{request.id}"
-      clinicians ->
-        create_bids(clinicians, request)
+    case request.status do
+      :open ->
+        case Registry.list_eligible_clinicians(request) do
+          [] ->
+            Logger.info "Eligible clinician unavailable for request: #{request.id}"
+          clinicians ->
+            create_bids(clinicians, request)
+        end
     end
   end
 

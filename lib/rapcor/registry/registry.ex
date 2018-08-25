@@ -12,6 +12,8 @@ defmodule Rapcor.Registry do
   alias Rapcor.Registry.Request
   alias Rapcor.Registry.Request.Enums.RequestStatus
   alias Rapcor.Registry.RequestBid
+  alias Rapcor.Workers.FillRequestWorker
+  alias Rapcor.Workers.NotifyRequestBid
 
   @doc """
   Returns the list of requests by provider.
@@ -64,9 +66,16 @@ defmodule Rapcor.Registry do
 
   """
   def create_request(attrs \\ %{}) do
-    %Request{status: :open}
+    query = %Request{status: :open}
     |> Request.create_changeset(attrs)
-    |> Repo.insert()
+  
+    case Repo.insert(query) do
+      {:ok, request} ->
+        FillRequestWorker.enqueue(request)
+        {:ok, request}
+      resp ->
+        resp
+    end
   end
 
   @doc """
@@ -139,16 +148,23 @@ defmodule Rapcor.Registry do
   Create request bid.
   """
   def create_request_bid(%Request{} = request, %Clinician{} = clinician) do
-    %RequestBid{}
+    query = %RequestBid{}
     |> RequestBid.create_changeset(%{request_id: request.id, clinician_id: clinician.id})
-    |> Repo.insert
+
+    case Repo.insert(query) do
+      {:ok, request_bid} ->
+        NotifyRequestBid.enqueue(request_bid)
+        {:ok, request_bid}
+      error ->
+        error
+    end
   end
 
   @doc """
   Returns a list of eligible clinicians for a request.
 
-  Clinicians should be approved, have valid documents, and meet the required
-  experience.
+  Clinicians should be approved, have valid documents, meet the required
+  experience, and not have an existing reequest bid.
 
   ## Options
 
@@ -166,8 +182,8 @@ defmodule Rapcor.Registry do
     request = Repo.preload request, :request_experiences
 
     query = from c in Clinician,
-      join: ce in ClinicianExperience, on: ce.clinician_id == c.id,
-      left_join: rb in RequestBid, on: rb.clinician_id == c.id,
+      left_join: ce in ClinicianExperience, on: ce.clinician_id == c.id,
+      left_join: rb in RequestBid, on: [clinician_id: c.id, request_id: ^request.id],
       where: is_nil(rb.id),
       group_by: c.id,
       select: c,

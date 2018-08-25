@@ -19,5 +19,12 @@ defmodule Rapcor.Registry.RequestBid do
     request_bid
     |> cast(attrs, [:request_id, :clinician_id, :slug])
     |> validate_required([:clinician_id, :request_id])
+    |> put_change(:slug, create_slug())
+  end
+
+  def create_slug do
+    UUID.uuid4(:hex)
+    |> Base.decode16!(case: :lower)
+    |> Base.url_encode64(padding: false)
   end
 end

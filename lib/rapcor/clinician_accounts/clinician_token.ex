@@ -17,7 +17,7 @@ defmodule Rapcor.ClinicianAccounts.ClinicianToken do
   schema "clinician_tokens" do
     field :source, :string
 
-    belongs_to :clinician, Clincian
+    belongs_to :clinician, Clinician
 
     timestamps()
   end

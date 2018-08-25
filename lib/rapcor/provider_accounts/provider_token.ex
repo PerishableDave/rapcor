@@ -8,7 +8,7 @@ defmodule Rapcor.ProviderAccounts.ProviderToken do
   schema "provider_tokens" do
     field :source, :string
 
-    belongs_to :provider, :Provider
+    belongs_to :provider, Provider
 
     timestamps()
   end
