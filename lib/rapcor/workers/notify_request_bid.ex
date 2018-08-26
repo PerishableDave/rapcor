@@ -17,7 +17,8 @@ defmodule Rapcor.Workers.NotifyRequestBid do
 
     url = Endpoint.url <> "/r/" <> request_bid.slug
     phone_number = request_bid.clinician.phone_number
-    message = "Test message: #{url}"
+    {:ok, start_time} = Timex.format(request_bid.request.start_date, "{WDshort}, {M}/{D} {h12}:{m} {AM}")
+    message = "RT Request: #{start_time} #{url}"
 
     IO.inspect @from_number
 

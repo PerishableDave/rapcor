@@ -55,7 +55,8 @@ defmodule Rapcor.Mixfile do
       {:ecto_enum, "~> 1.1"},
       {:exq, "~> 0.12.1"},
       {:ex_twilio, "~> 0.6.0"},
-      {:elixir_uuid, "~> 1.2.0"}
+      {:elixir_uuid, "~> 1.2.0"},
+      {:timex, "~> 3.3.0"}
     ]
   end
 
