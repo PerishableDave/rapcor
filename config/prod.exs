@@ -90,7 +90,7 @@ config :exq,
   host: System.get_env("REDIS_HOST"),
   port: System.get_env("REDIS_PORT"),
   database: System.get_env("REDIS_USER"),
-  password: System.get_env("REDIS_PASS")
+  password: System.get_env("REDIS_PASS"),
   namespace: "exq",
   concurrency: :infinite,
   queues: ["default"],
