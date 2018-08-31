@@ -2,6 +2,7 @@ defmodule Rapcor.Workers.NotifyRequestBid do
   require Logger
 
   alias ExTwilio.Message
+  alias Rapcor.Workers.Queue
   alias Rapcor.Registry
   alias Rapcor.Registry.RequestBid
   alias RapcorWeb.Endpoint
@@ -9,7 +10,7 @@ defmodule Rapcor.Workers.NotifyRequestBid do
   @from_number Application.get_env(:rapcor, :twilio_from_number)
 
   def enqueue(%RequestBid{} = request_bid) do
-    Exq.enqueue(Exq, "default", __MODULE__, [request_bid.id])
+    Queue.enqueue(__MODULE__, [request_bid.id])
   end
 
   def perform(request_bid_id) do

@@ -26,6 +26,7 @@ defmodule RapcorWeb.ProviderRequestControllerTest do
         "end_date" => "2015-01-23T23:50:07.000000Z",
         "id" => request.id,
         "notes" => "some notes",
+        "status" => "open",
         "request_experiences" => [%{"experience_id" => experience.id, "minimum_years" => 3}],
         "start_date" => "2015-01-23T23:50:07.000000Z"
       }]
@@ -50,6 +51,7 @@ defmodule RapcorWeb.ProviderRequestControllerTest do
         "contact_phone" => "+11231234",
         "end_date" => "2015-01-23T23:50:07.000000Z",
         "notes" => "some notes",
+        "status" => "open",
         "request_experiences" => [%{"experience_id" => experience_id, "minimum_years" => 3}],
         "start_date" => "2015-01-23T23:50:07.000000Z"}
     end
@@ -76,6 +78,7 @@ defmodule RapcorWeb.ProviderRequestControllerTest do
         "contact_email" => "updated@email.com",
         "contact_phone" => "+12342345",
         "notes" => "some updated notes",
+        "status" => "open",
         "request_experiences" => [%{"experience_id" => experience.id, "minimum_years" => 3}],
         "start_date" => "2015-01-23T23:50:07.000000Z",
         "end_date" => "2015-01-23T23:50:07.000000Z"}

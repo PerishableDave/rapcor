@@ -92,6 +92,27 @@ defmodule Rapcor.RegistryTest do
   end
 
   describe "request_bids" do
+    test "get_request_bid_by_slug!/1 with valid slug returns a request bid" do
+      %{request: request} = RequestFixtures.request()
+      %{clinician: clinician} = ClinicianFixtures.clinician()
+
+      {:ok, created_request_bid} = Registry.create_request_bid(request, clinician)
+
+      request_bid = Registry.get_request_bid_by_slug(created_request_bid.slug)
+      assert request_bid.id == created_request_bid.id
+    end
+
+    test "get_request_bid_by_slug!/1 with invalid slug returns a request bid" do
+      %{request: request} = RequestFixtures.request()
+      %{clinician: clinician} = ClinicianFixtures.clinician()
+
+      {:ok, created_request_bid} = Registry.create_request_bid(request, clinician)
+
+      request_bid = Registry.get_request_bid_by_slug(created_request_bid.slug)
+      assert Registry.get_request_bid_by_slug("some_slug") == nil
+    end
+
+
     test "create_request_bid/2 with valid data creates a request bid" do
       %{request: request} = RequestFixtures.request()
       %{clinician: clinician} = ClinicianFixtures.clinician()

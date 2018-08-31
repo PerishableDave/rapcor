@@ -53,6 +53,7 @@ defmodule Rapcor.Registry do
     Repo.get!(query, id)
   end
 
+  
   @doc """
   Creates a request.
 
@@ -134,7 +135,7 @@ defmodule Rapcor.Registry do
       {:ok, %RequestBid{}}
 
       iex> get_request_bid!(id)
-      {:error, %Ecto.Changeset{}}
+      ** (Ecto.NoResultsError)
 
   """
   def get_request_bid!(id) do
@@ -142,6 +143,53 @@ defmodule Rapcor.Registry do
       preload: [:request, :clinician]
 
     Repo.get!(query, id)
+  end
+
+  @doc """
+  Get a request bid by its unique slug.
+
+  ## Examples
+
+      iex> get_request_bid_by_slug!(slug)
+      %RequestBid{}
+
+      iex> get_request_bid_by_slug!(slug)
+      nil
+
+  """
+  def get_request_bid_by_slug(slug) do
+    query = from rb in RequestBid,
+      join: r in Request, on: r.id == rb.request_id,
+      where: rb.slug == ^slug,
+      select: rb,
+      preload: [request: [:provider]]
+
+    Repo.one(query)
+  end
+
+  @doc """
+  List request bids for a clinician that are eitehr open
+  or being/have been filled by the clinician.
+
+  ## Examples
+
+      iex> list_request_bids(clinician)
+      [%RequestBid{}, ...]
+
+      iex> list_request_bids(clinician)
+      []
+
+  """
+  def list_request_bids(%Clinician{} = clinician) do
+    query = from rb in RequestBid,
+      join: r in Request, on: r.id == rb.request_id,
+      where: rb.clinician_id == ^clinician.id,
+      where: is_nil(r.accepted_clinician_id),
+      or_where: r.accepted_clinician_id == ^clinician.id,
+      select: rb,
+      preload: [request: [:provider]]
+
+    Repo.all(query)
   end
 
   @doc """

@@ -91,3 +91,6 @@ config :ex_twilio,
 
 config :rapcor,
   twilio_from_number: System.get_env("TWILIO_FROM_NUMBER")
+
+config :rapcor,
+  worker_queue: Exq

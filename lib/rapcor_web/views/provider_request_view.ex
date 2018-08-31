@@ -1,8 +1,7 @@
 defmodule RapcorWeb.ProviderRequestView do
   use RapcorWeb, :view
-  alias RapcorWeb.ProviderRequestView
 
-  import Ecto, only: [assoc_loaded?: 1]
+  alias RapcorWeb.ProviderRequestView
 
   def render("index.json", %{requests: requests}) do
     %{requests: render_many(requests, ProviderRequestView, "provider_request.json")}
@@ -22,12 +21,16 @@ defmodule RapcorWeb.ProviderRequestView do
       notes: request.notes,
       status: request.status
     }
+    |> render_request_experiences(request)
   end
 
-  def render_request_experiences(request_experiences) do
-    Enum.map(request_experiences, fn request_experience ->
+  def render_request_experiences(data, %Ecto.Association.NotLoaded{}), do: data
+
+  def render_request_experiences(data, %{request_experiences: request_experiences}) do
+    request_experiences = Enum.map(request_experiences, fn request_experience ->
       %{experience_id: request_experience.experience_id,
         minimum_years: request_experience.minimum_years}
     end)
+    Map.put(data, :request_experiences, request_experiences)
   end
 end

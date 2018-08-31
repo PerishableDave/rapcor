@@ -98,3 +98,13 @@ config :exq,
   max_retries: 25,
   shutdown_timeout: 5000,
   start_on_application: false
+
+config :ex_twilio,
+  account_sid: System.get_env("TWILIO_ACCOUNT_SID"),
+  auth_token: System.get_env("TWILIO_AUTH_TOKEN")
+
+config :rapcor,
+  twilio_from_number: System.get_env("TWILIO_FROM_NUMBER")
+
+config :rapcor,
+  worker_queue: Exq

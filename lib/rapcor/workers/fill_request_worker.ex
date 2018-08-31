@@ -1,11 +1,12 @@
 defmodule Rapcor.Workers.FillRequestWorker do
   require Logger
 
+  alias Rapcor.Workers.Queue
   alias Rapcor.Registry
   alias Rapcor.Registry.Request
 
   def enqueue(%Request{} = request) do
-    Exq.enqueue(Exq, "default", __MODULE__, [request.id])
+    Queue.enqueue(__MODULE__, [request.id])
   end
 
   def perform(request_id) do
@@ -23,7 +24,7 @@ defmodule Rapcor.Workers.FillRequestWorker do
   end
 
   def create_bids([], request) do
-    Exq.enqueue_in(Exq, "default", 600, __MODULE__, [request.id])
+    Queue.enqueue_in(__MODULE__, 600, [request.id])
   end
 
   def create_bids([clinician | rest], request) do

@@ -34,3 +34,6 @@ config :exq,
   max_retries: 25,
   shutdown_timeout: 5000,
   start_on_application: false
+
+config :rapcor,
+  worker_queue: Rapcor.MockQueue

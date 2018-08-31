@@ -27,7 +27,7 @@ defmodule Rapcor.Fixtures.ClinicianFixtures do
     |> put(:country, Address.country_code)
 
     {:ok, clinician} = ClinicianAccounts.create_clinician(attrs)
-    {:ok, token} = ClinicianAccounts.create_clinician_token(clinician.email, password)
+    {:ok, token} = ClinicianAccounts.create_clinician_token(clinician.email, password())
 
     %{clinician: clinician, clinician_token: token}
   end
