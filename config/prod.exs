@@ -87,8 +87,10 @@ config :rapcor, Rapcor.PhotoStorage,
 
 config :exq,
   name: Exq,
-  host: System.get_env("REDISCLOUD_URL"),
-  port: 6379,
+  host: System.get_env("REDIS_HOST"),
+  port: System.get_env("REDIS_PORT"),
+  database: System.get_env("REDIS_USER"),
+  password: System.get_env("REDIS_PASS")
   namespace: "exq",
   concurrency: :infinite,
   queues: ["default"],
