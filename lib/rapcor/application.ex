@@ -14,6 +14,7 @@ defmodule Rapcor.Application do
       supervisor(RapcorWeb.Endpoint, []),
       # Start your own worker by calling: Rapcor.Worker.start_link(arg1, arg2, arg3)
       # worker(Rapcor.Worker, [arg1, arg2, arg3]),
+      supervisor(Exq, []),
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

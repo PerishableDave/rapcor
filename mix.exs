@@ -51,7 +51,12 @@ defmodule Rapcor.Mixfile do
       {:sweet_xml, "~> 0.3"},
       {:poison, "~> 3.0"},
       {:hackney, "~> 1.9"},
-      {:uuid, "~> 1.1" }
+      {:uuid, "~> 1.1"},
+      {:ecto_enum, "~> 1.1"},
+      {:exq, "~> 0.12.1"},
+      {:ex_twilio, "~> 0.6.0"},
+      {:elixir_uuid, "~> 1.2.0"},
+      {:timex, "~> 3.3.0"}
     ]
   end
 
@@ -63,9 +68,10 @@ defmodule Rapcor.Mixfile do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "ecto.setup": ["ecto.create", "ecto.migrate"],
+      "ecto.seed": ["run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      "test": ["ecto.create --quiet", "ecto.migrate", "test"]
+      test: ["ecto.create --quiet", "ecto.migrate", "test"]
     ]
   end
 end

@@ -10,7 +10,7 @@ defmodule Rapcor.ClinicianAccounts.ClinicianExperience do
     belongs_to :clinician, Clinician
     belongs_to :experience, Experience
 
-    timestamps
+    timestamps()
   end
 
   @doc false

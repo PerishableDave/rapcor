@@ -21,3 +21,19 @@ config :rapcor, Rapcor.Repo,
 config :rapcor, Rapcor.PhotoStorage,
   bucket: "rapcor-dev"
 
+config :exq,
+  name: Exq,
+  host: "localhost",
+  port: 6379,
+  namespace: "exq_test",
+  concurrency: :infinite,
+  queues: ["default"],
+  poll_timeout: 50,
+  scheduler_poll_timeout: 200,
+  scheduler_enable: true,
+  max_retries: 25,
+  shutdown_timeout: 5000,
+  start_on_application: false
+
+config :rapcor,
+  worker_queue: Rapcor.MockQueue

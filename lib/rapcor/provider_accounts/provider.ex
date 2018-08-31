@@ -42,7 +42,8 @@ defmodule Rapcor.ProviderAccounts.Provider do
     provider
     |> cast(attrs, @attrs)
     |> validate_required([:name, :contact_email, :contact_number, :country, :administrative_area, :locality, :postal_code, :thoroughfare])
-    |> validate_format(:contact_email, ~r/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)
+    |> validate_format(:contact_email, ~r/^[a-zA-Z0-9_.'+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)
+    |> validate_format(:contact_number, ~r/^\+?[1-9]\d{1,14}$/)
     |> validate_length(:password, min: 9, max: 100)
   end
 
@@ -51,7 +52,8 @@ defmodule Rapcor.ProviderAccounts.Provider do
     |> cast(attrs, @attrs)
     |> validate_required([:name, :contact_email, :contact_number, :country, :administrative_area, :locality, :postal_code,:thoroughfare, :password, :password_confirmation])
     |> update_change(:contact_email, &(String.downcase(&1)))
-    |> validate_format(:contact_email, ~r/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)
+    |> validate_format(:contact_email, ~r/^[a-zA-Z0-9_.'+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/)
+    |> validate_format(:contact_number, ~r/^\+?[1-9]\d{1,14}$/)
     |> validate_length(:password, min: 9, max: 100)
     |> unique_constraint(:contact_email)
     |> put_password

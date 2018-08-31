@@ -5,7 +5,7 @@ defmodule Rapcor.ClinicianAccountsTest do
   alias Rapcor.Clinician
   alias Rapcor.ClinicianAccounts.ClinicianToken
 
-  @clinician_valid_attrs %{administrative_area: "some administrative_area", country: "some country", email: "some@email.com", first_name: "some first_name", last_name: "some last_name", locality: "some locality", middle_name: "some middle_name", password: "some password", phone_number: "some phone_number", postal_code: "some postal_code", premise: "some premise", sub_administrative_area: "some sub_administrative_area", thoroughfare: "some thoroughfare"}
+  @clinician_valid_attrs %{administrative_area: "some administrative_area", country: "some country", email: "some@email.com", first_name: "some first_name", last_name: "some last_name", locality: "some locality", middle_name: "some middle_name", password: "some password", phone_number: "+11231234", postal_code: "some postal_code", premise: "some premise", sub_administrative_area: "some sub_administrative_area", thoroughfare: "some thoroughfare"}
   @experience_valid_attrs %{description: "some description"}
   @valid_attrs %{back_photo: "some back_photo", expiration: ~D[2010-04-17], front_photo: "some front_photo", name: "some name", number: "some number", slug: "rt-rcp", state: "some state"}
 
@@ -52,8 +52,8 @@ defmodule Rapcor.ClinicianAccountsTest do
   describe "clinicians" do
     alias Rapcor.ClinicianAccounts.Clinician
 
-    @valid_attrs %{administrative_area: "some administrative_area", country: "some country", email: "some@email.com", first_name: "some first_name", last_name: "some last_name", locality: "some locality", middle_name: "some middle_name", password: "some password_hash", phone_number: "some phone_number", postal_code: "some postal_code", premise: "some premise", sub_administrative_area: "some sub_administrative_area", thoroughfare: "some thoroughfare"}
-    @update_attrs %{administrative_area: "some updated administrative_area", country: "some updated country", email: "some@email.com", first_name: "some updated first_name", last_name: "some updated last_name", locality: "some updated locality", middle_name: "some updated middle_name", password: "some updated password_hash", phone_number: "some updated phone_number", postal_code: "some updated postal_code", premise: "some updated premise", sub_administrative_area: "some updated sub_administrative_area", thoroughfare: "some updated thoroughfare"}
+    @valid_attrs %{administrative_area: "some administrative_area", country: "some country", email: "some@email.com", first_name: "some first_name", last_name: "some last_name", locality: "some locality", middle_name: "some middle_name", password: "some password_hash", phone_number: "+11231234", postal_code: "some postal_code", premise: "some premise", sub_administrative_area: "some sub_administrative_area", thoroughfare: "some thoroughfare"}
+    @update_attrs %{administrative_area: "some updated administrative_area", country: "some updated country", email: "some@email.com", first_name: "some updated first_name", last_name: "some updated last_name", locality: "some updated locality", middle_name: "some updated middle_name", password: "some updated password_hash", phone_number: "+12342345", postal_code: "some updated postal_code", premise: "some updated premise", sub_administrative_area: "some updated sub_administrative_area", thoroughfare: "some updated thoroughfare"}
     @invalid_attrs %{administrative_area: nil, country: nil, email: nil, first_name: nil, last_name: nil, locality: nil, middle_name: nil, password_hash: nil, phone_number: nil, postal_code: nil, premise: nil, sub_administrative_area: nil, thoroughfare: nil}
 
 
@@ -83,7 +83,7 @@ defmodule Rapcor.ClinicianAccountsTest do
       assert clinician.locality == "some locality"
       assert clinician.middle_name == "some middle_name"
       assert Clinician.check_password(clinician, "some_password")
-      assert clinician.phone_number == "some phone_number"
+      assert clinician.phone_number == "+11231234"
       assert clinician.postal_code == "some postal_code"
       assert clinician.premise == "some premise"
       assert clinician.sub_administrative_area == "some sub_administrative_area"
@@ -106,7 +106,7 @@ defmodule Rapcor.ClinicianAccountsTest do
       assert clinician.locality == "some updated locality"
       assert clinician.middle_name == "some updated middle_name"
       assert Clinician.check_password(clinician, "some password")
-      assert clinician.phone_number == "some updated phone_number"
+      assert clinician.phone_number == "+12342345"
       assert clinician.postal_code == "some updated postal_code"
       assert clinician.premise == "some updated premise"
       assert clinician.sub_administrative_area == "some updated sub_administrative_area"
