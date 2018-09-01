@@ -6,6 +6,10 @@ defmodule RapcorWeb.ClinicianRequestBidView do
   alias RapcorWeb.ClinicianRequestBidView
   alias Rapcor.Registry.RequestBid
 
+  def render("index.json", %{clinician_request_bids: request_bids}) do
+    %{request_bids: render_many(request_bids, ClinicianRequestBidView, "request_bid.json", as: :request_bid)}
+  end
+
   def render("show.json", %{clinician_request_bid: request_bid}) do
     %{request_bid: render_one(request_bid, ClinicianRequestBidView, "request_bid.json", as: :request_bid)}
   end

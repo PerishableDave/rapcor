@@ -1,9 +1,18 @@
 defmodule RapcorWeb.ClinicianRequestBidController do
   use RapcorWeb, :controller
 
+  alias Rapcor.Registry
+  alias Rapcor.Authorization.ClinicianAuthPlug
+
   action_fallback RapcorWeb.FallbackController
 
-  alias Rapcor.Registry
+  plug ClinicianAuthPlug when action in [:index]
+
+  def index(conn, _params) do
+    clinician = current_clinician(conn)
+    request_bids = Registry.list_request_bids(clinician)
+    render(conn, "index.json", clinician_request_bids: request_bids)
+  end
 
   def show(conn, %{"slug" => slug}) do
     case Registry.get_request_bid_by_slug(slug) do

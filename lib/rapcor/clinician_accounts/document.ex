@@ -6,7 +6,6 @@ defmodule Rapcor.ClinicianAccounts.Document do
   alias Ecto.Changeset
   alias Rapcor.ClinicianAccounts.Clinician
 
-
   schema "documents" do
     field :back_photo, :string
     field :expiration, :date

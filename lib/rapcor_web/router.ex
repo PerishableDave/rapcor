@@ -20,6 +20,7 @@ defmodule RapcorWeb.Router do
     scope "/clinicians/current", as: :current_clinician do
       resources "/experiences", ClinicianExperienceController, only: [:index, :create], as: :experience
       resources "/documents", DocumentController
+      resources "/request-bids", ClinicianRequestBidController, only: [:index]
     end
 
     resources "/clinicians", ClinicianController, only: [:index, :create, :show]
