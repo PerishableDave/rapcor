@@ -185,7 +185,8 @@ defmodule Rapcor.Registry do
       join: r in Request, on: r.id == rb.request_id,
       where: rb.clinician_id == ^clinician.id,
       where: is_nil(r.accepted_clinician_id),
-      or_where: r.accepted_clinician_id == ^clinician.id,
+      where: r.start_date > ^NaiveDateTime.utc_now,
+      or_where: (r.accepted_clinician_id == ^clinician.id and r.end_date > ^NaiveDateTime.utc_now),
       select: rb,
       preload: [request: [:provider]]
 
