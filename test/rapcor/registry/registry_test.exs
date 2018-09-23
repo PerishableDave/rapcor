@@ -108,7 +108,7 @@ defmodule Rapcor.RegistryTest do
 
       {:ok, created_request_bid} = Registry.create_request_bid(request, clinician)
 
-      request_bid = Registry.get_request_bid_by_slug(created_request_bid.slug)
+      Registry.get_request_bid_by_slug(created_request_bid.slug)
       assert Registry.get_request_bid_by_slug("some_slug") == nil
     end
 
@@ -152,9 +152,9 @@ defmodule Rapcor.RegistryTest do
 
       {:ok, request_bid} = Registry.create_request_bid(request, clinician)
 
-      assert {:ok, request} = Registry.accept_request_bid(request_bid)
-      assert request.status == :fulfilled
-      assert request.accepted_clinician_id == clinician.id
+      assert {:ok, request_bid} = Registry.accept_request_bid(request_bid)
+      assert request_bid.request.status == :fulfilled
+      assert request_bid.request.accepted_clinician_id == clinician.id
     end
 
     test "accept_request_bid/1 with a fulfilled request returns an error" do
@@ -166,8 +166,8 @@ defmodule Rapcor.RegistryTest do
       {:ok, rejected_request_bid} = Registry.create_request_bid(request, rejected_clinician)
 
       {:ok, _} = Registry.accept_request_bid(accepted_request_bid)
-      assert {:error, _} = Registry.accept_request_bid(rejected_request_bid)
-
+      assert {:error, _, request_bid} = Registry.accept_request_bid(rejected_request_bid)
+      assert request_bid.id == rejected_request_bid.id
     end
   end
 end

@@ -27,4 +27,10 @@ defmodule Rapcor.Registry.RequestBid do
     |> Base.decode16!(case: :lower)
     |> Base.url_encode64(padding: false)
   end
+
+  def request_bid_status(%{request: %{accepted_clinician_id: nil, status: status}}), do: status
+
+  def request_bid_status(%{clinician_id: clinician_id, request: %{accepted_clinician_id: clinician_id, status: status}}), do: status
+
+  def request_bid_status(_), do: :closed
 end

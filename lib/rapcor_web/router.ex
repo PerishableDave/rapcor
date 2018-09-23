@@ -11,8 +11,9 @@ defmodule RapcorWeb.Router do
 
     resources "/clinicians/tokens/", ClinicianTokenController, only: [:create, :delete]
 
-    get "/clinicians/request-bids/:slug", ClinicianRequestBidController, :show
-    post "/clinicians/request-bids/:slug/accept", ClinicianRequestBidController, :accept
+    get "/clinicians/request-bids/slug/:slug", ClinicianRequestBidController, :show_slug
+    post "/clinicians/request-bids/slug/:slug/accept", ClinicianRequestBidController, :accept
+    get "/clinicians/request-bids/:id", ClinicianRequestBidController, :show
 
     get "/clinicians/current", ClinicianController, :current, as: :current_clinician
     put "/clinicians/current", ClinicianController, :update, as: :current_clinician

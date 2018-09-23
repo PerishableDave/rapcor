@@ -140,7 +140,8 @@ defmodule Rapcor.Registry do
   """
   def get_request_bid!(id) do
     query = from rb in RequestBid,
-      preload: [:request, :clinician]
+      preload: [request: [:provider]],
+      preload: [:clinician]
 
     Repo.get!(query, id)
   end
@@ -281,10 +282,12 @@ defmodule Rapcor.Registry do
     ]
 
     case Repo.update_all(query, [set: update], returning: true) do
-      {1, [request]} ->
-        {:ok, request}
+      {1, _} ->
+        request_bid = get_request_bid!(request_bid.id)
+        {:ok, request_bid}
       _ ->
-        {:error, "Request no longer available"}
+        request_bid = get_request_bid!(request_bid.id)
+        {:error, "Request no longer available", request_bid}
     end
   end
 end

@@ -19,21 +19,17 @@ defmodule RapcorWeb.ClinicianRequestBidView do
   end
 
   def render("request_bid.json", %{request_bid: %RequestBid{} = request_bid}) do
-    %{
+    request = request_bid.request
+
+    data = %{
       id: request_bid.id,
       slug: request_bid.slug,
-      request: render_one(request_bid.request, ClinicianRequestBidView, "request.json", as: :request)
-    }
-  end
-
-  def render("request.json", %{request: request}) do
-    data =%{
       contact_email: request.contact_email,
       contact_phone: request.contact_phone,
       start_date: request.start_date,
       end_date: request.end_date,
       notes: request.notes,
-      status: request.status,
+      status: RequestBid.request_bid_status(request_bid)
     }
 
     case assoc_loaded?(request.provider) do
@@ -44,7 +40,7 @@ defmodule RapcorWeb.ClinicianRequestBidView do
     end
   end
 
-  def render("provider.json", %{provider: provider}) do
+    def render("provider.json", %{provider: provider}) do
     %{
       administrative_area: provider.administrative_area,
       country: provider.country,
