@@ -1,5 +1,6 @@
 defmodule RapcorWeb.Router do
   use RapcorWeb, :router
+  use Honeybadger.Plug
 
 
   pipeline :api do

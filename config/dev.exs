@@ -94,3 +94,7 @@ config :rapcor,
 
 config :rapcor,
   worker_queue: Exq
+
+config :honeybadger,
+  api_key: "d6772138",
+  environment_name: "development"
