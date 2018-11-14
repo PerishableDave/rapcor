@@ -38,6 +38,7 @@ defmodule RapcorWeb.Router do
 
     scope "/providers/current", as: :current_provider do
       resources "/requests", ProviderRequestController, only: [:index, :create, :update, :show], as: :request
+      resources "/locations", ProviderLocationController
     end
   end
 end

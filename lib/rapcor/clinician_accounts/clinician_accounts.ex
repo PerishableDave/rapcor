@@ -341,8 +341,6 @@ defmodule Rapcor.ClinicianAccounts do
   def list_clinician_documents(%Clinician{} = clinician) do
     query = from(ce in ClinicianExperience, where: ce.clinician_id == ^clinician.id)
     Repo.all(query)
-
-    Repo.all(Document)
   end
 
   @doc """

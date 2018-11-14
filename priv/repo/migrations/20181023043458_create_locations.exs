@@ -1,11 +1,9 @@
-defmodule Rapcor.Repo.Migrations.CreateProviders do
+defmodule Rapcor.Repo.Migrations.CreateLocations do
   use Ecto.Migration
 
   def change do
-    create table(:providers) do
+    create table(:locations) do
       add :name, :string, null: false
-      add :contact_email, :string, null: false
-      add :contact_number, :string, null: false
       add :country, :string, null: false
       add :administrative_area, :string, null: false
       add :locality, :string, null: false
@@ -13,12 +11,11 @@ defmodule Rapcor.Repo.Migrations.CreateProviders do
       add :premise, :string
       add :sub_administrative_area, :string
       add :thoroughfare, :string, null: false
-      add :password_hash, :string, null: false
-      add :provider_id, references(:provider), null: false
+      add :provider_id, references(:providers), null: false
 
       timestamps()
     end
 
-    create index(:providers, [:contact_email], unique: true)
+    create index(:locations, [:provider_id])
   end
 end
